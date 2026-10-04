@@ -1,0 +1,46 @@
+@model Book
+@{
+    ViewData["Title"] = "Nội dung — NHÀ GIẢ KIM";
+    ViewData["Nav"] = "noi-dung";
+    var banner = await Settings.GetAsync("banner_image");
+    var steps = new[]
+    {
+        (No: "01", Title: "Ước mơ", Text: "Chàng chăn cừu Santiago dám rời bỏ vùng đồng cỏ quen thuộc tại Andalusia để lắng nghe tiếng gọi của giấc mơ thầm kín về Kim Tự Tháp."),
+        (No: "02", Title: "Hành trình", Text: "Vượt qua sa mạc mênh mông, đối mặt với bão cát, thử thách sống còn và học cách thấu hiểu thứ ngôn ngữ không lời của thế giới."),
+        (No: "03", Title: "Niềm tin", Text: "Cuộc hội ngộ định mệnh với Nhà Giả Kim dạy cho Santiago biết cách tin vào trái tim, giải mã các dấu hiệu và kiên định với sứ mệnh."),
+        (No: "04", Title: "Khám phá bản thân", Text: "Kho báu quý giá nhất không chỉ nằm ở nơi đích đến mà kết tinh trọn vẹn trong chính sự thức tỉnh và trưởng thành của tâm hồn.")
+    };
+}
+
+<section class="py-24 md:py-32 bg-[#FFFFFF] border-b border-[#E5E5E5]">
+    <div class="max-w-[1240px] mx-auto px-6">
+        <div class="max-w-2xl mb-16">
+            <span class="text-[12px] font-semibold uppercase tracking-[0.25em] text-[#666666] block mb-3">Hành trình câu chuyện</span>
+            <h2 class="text-3xl md:text-5xl font-bold text-[#111111] tracking-tight leading-tight">Một hành trình đi tìm kho báu và chính mình</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            @foreach (var s in steps)
+            {
+                <div class="p-8 border border-[#E5E5E5] rounded-[8px] bg-white hover:border-[#111111] transition-all duration-300">
+                    <div class="text-xs font-semibold text-[#666666] tracking-widest uppercase mb-4">@s.No</div>
+                    <h3 class="text-xl font-bold text-[#111111] mb-3">@s.Title</h3>
+                    <p class="text-sm text-[#666666] leading-relaxed">@s.Text</p>
+                </div>
+            }
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(banner))
+        {
+            <div class="relative w-full rounded-xl overflow-hidden border border-[#E5E5E5] bg-[#F5F5F5]">
+                <img src="@banner" alt="Sa mạc mênh mông tượng trưng cho hành trình tìm kiếm ý nghĩa cuộc đời" referrerpolicy="no-referrer" class="w-full h-[320px] md:h-[420px] object-cover filter contrast-[1.05]" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8 md:p-12">
+                    <div class="text-white max-w-xl">
+                        <span class="text-xs uppercase tracking-widest text-neutral-300 block mb-2">Không gian huyền bí</span>
+                        <p class="text-lg md:text-xl font-medium leading-relaxed">&ldquo;Sa mạc bao la là người thầy vĩ đại nhất, nơi mỗi hạt cát đều cất giấu một câu chuyện về sự chuyển hóa.&rdquo;</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>

@@ -1,0 +1,65 @@
+/* Giữ nguyên style tùy biến từ source thiết kế (src/index.css) */
+html {
+    scroll-behavior: smooth;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: #111111;
+    background-color: #FFFFFF;
+    -webkit-font-smoothing: antialiased;
+}
+
+.custom-input {
+    height: 48px;
+    border: 1px solid #E5E5E5;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    padding: 0 16px;
+    width: 100%;
+    outline: none;
+    transition: border-color 200ms ease;
+}
+
+    .custom-input:focus {
+        border-color: #111111;
+    }
+
+.btn-primary {
+    background-color: #111111;
+    color: #FFFFFF;
+    border-radius: 8px;
+    height: 50px;
+    font-weight: 600;
+    transition: background-color 200ms ease, transform 200ms ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 28px;
+    cursor: pointer;
+}
+
+    .btn-primary:hover {
+        background-color: #2A2A2A;
+        transform: translateY(-1px);
+    }
+
+.btn-secondary {
+    background-color: #FFFFFF;
+    color: #111111;
+    border: 1px solid #E5E5E5;
+    border-radius: 8px;
+    height: 50px;
+    font-weight: 500;
+    transition: background-color 200ms ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 28px;
+    cursor: pointer;
+}
+
+    .btn-secondary:hover {
+        background-color: #F5F5F5;
+    }

@@ -1,0 +1,96 @@
+@model AdminFeedbacksViewModel
+@{
+    ViewData["Title"] = "Duyệt đánh giá — NHÀ GIẢ KIM";
+    ViewData["Nav"] = "admin";
+    var ok = TempData["Ok"] as string;
+    var error = TempData["Error"] as string;
+    string TabCss(bool active) => active
+        ? "bg-[#111111] text-white border-[#111111]"
+        : "bg-white text-[#666666] border-[#E5E5E5] hover:border-[#111111] hover:text-[#111111]";
+    string Stars(int n) { n = Math.Clamp(n, 0, 5); return new string('★', n) + new string('☆', 5 - n); }
+    string Label(string s) => s switch
+    {
+        FeedbackStatus.Approved => "Đã duyệt",
+        FeedbackStatus.Rejected => "Từ chối",
+        _ => "Chờ duyệt"
+    };
+    string Badge(string s) => s switch
+    {
+        FeedbackStatus.Approved => "bg-[#111111] text-white border border-[#111111]",
+        FeedbackStatus.Rejected => "bg-white text-[#999999] border border-[#E5E5E5] line-through",
+        _ => "bg-[#F5F5F5] text-[#666666] border border-[#E5E5E5]"
+    };
+}
+
+<section class="py-16 md:py-20 bg-[#F5F5F5] border-b border-[#E5E5E5]">
+    <div class="max-w-[1240px] mx-auto px-6">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+            <div>
+                <span class="text-[12px] font-semibold uppercase tracking-[0.25em] text-[#666666] block mb-3">Khu vực quản trị</span>
+                <h1 class="text-3xl md:text-4xl font-bold text-[#111111] tracking-tight">Duyệt đánh giá</h1>
+            </div>
+            <div class="flex gap-2 text-sm font-medium">
+                <a href="~/quan-tri/don-hang" class="px-4 py-2 rounded-[8px] border bg-white text-[#666666] border-[#E5E5E5] hover:border-[#111111] hover:text-[#111111]">Đơn hàng</a>
+                <a href="~/quan-tri/danh-gia" class="px-4 py-2 rounded-[8px] border bg-[#111111] text-white border-[#111111]">Đánh giá</a>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(ok))
+        {
+            <div class="mb-6 p-4 rounded-[8px] border border-[#111111] bg-white text-sm font-medium text-[#111111]">@ok</div>
+        }
+        @if (!string.IsNullOrEmpty(error))
+        {
+            <div class="mb-6 p-4 rounded-[8px] border border-red-300 bg-red-50 text-sm font-medium text-red-700">@error</div>
+        }
+
+        <div class="flex flex-wrap gap-2 mb-6 text-sm font-medium">
+            <a href="~/quan-tri/danh-gia" class="px-4 py-2 rounded-[8px] border @TabCss(string.IsNullOrEmpty(Model.FilterStatus))">Tất cả</a>
+            <a href="~/quan-tri/danh-gia?status=pending" class="px-4 py-2 rounded-[8px] border @TabCss(Model.FilterStatus == FeedbackStatus.Pending)">Chờ duyệt</a>
+            <a href="~/quan-tri/danh-gia?status=approved" class="px-4 py-2 rounded-[8px] border @TabCss(Model.FilterStatus == FeedbackStatus.Approved)">Đã duyệt</a>
+            <a href="~/quan-tri/danh-gia?status=rejected" class="px-4 py-2 rounded-[8px] border @TabCss(Model.FilterStatus == FeedbackStatus.Rejected)">Từ chối</a>
+        </div>
+
+        <div class="space-y-4">
+            @if (Model.Items.Count == 0)
+            {
+                <div class="p-10 bg-white border border-[#E5E5E5] rounded-[8px] text-center text-sm text-[#666666]">Không có đánh giá nào.</div>
+            }
+            @foreach (var f in Model.Items)
+            {
+                <div class="p-6 bg-white border border-[#E5E5E5] rounded-[8px]">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                        <div class="flex items-center gap-3">
+                            <span class="font-bold text-[#111111]">@f.CustomerName</span>
+                            <span class="text-xs tracking-wider text-[#111111]">@Stars(f.Rating)</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs text-[#666666]">@f.CreatedAt.ToString("HH:mm dd/MM/yyyy")</span>
+                            <span class="@Badge(f.Status) text-xs font-semibold px-2.5 py-1 rounded-[4px]">@Label(f.Status)</span>
+                        </div>
+                    </div>
+                    <p class="text-[15px] text-[#666666] leading-relaxed mb-4">@f.Content</p>
+
+                    <div class="flex flex-wrap gap-2">
+                        @if (f.Status != FeedbackStatus.Approved)
+                        {
+                            <form method="post" asp-action="ModerateFeedback" asp-route-id="@f.FeedbackId">
+                                <input type="hidden" name="status" value="@FeedbackStatus.Approved" />
+                                <input type="hidden" name="filter" value="@Model.FilterStatus" />
+                                <button type="submit" class="bg-[#111111] text-white border border-[#111111] hover:bg-[#2A2A2A] text-xs font-semibold px-3 h-[34px] rounded-[6px] cursor-pointer transition-colors">Duyệt</button>
+                            </form>
+                        }
+                        @if (f.Status != FeedbackStatus.Rejected)
+                        {
+                            <form method="post" asp-action="ModerateFeedback" asp-route-id="@f.FeedbackId">
+                                <input type="hidden" name="status" value="@FeedbackStatus.Rejected" />
+                                <input type="hidden" name="filter" value="@Model.FilterStatus" />
+                                <button type="submit" class="bg-white text-[#666666] border border-[#E5E5E5] hover:border-[#111111] hover:text-[#111111] text-xs font-semibold px-3 h-[34px] rounded-[6px] cursor-pointer transition-colors">Từ chối</button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

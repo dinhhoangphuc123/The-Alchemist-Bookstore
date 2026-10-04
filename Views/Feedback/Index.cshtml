@@ -1,0 +1,107 @@
+@model FeedbackPageViewModel
+@{
+    ViewData["Title"] = "Đánh giá — NHÀ GIẢ KIM";
+    ViewData["Nav"] = "danh-gia";
+
+    string Stars(int n) { n = Math.Clamp(n, 0, 5); return new string('★', n) + new string('☆', 5 - n); }
+
+    var notice = TempData["Notice"] as string;
+    var isGuest = User.Identity?.IsAuthenticated != true;
+    var isCustomer = User.IsInRole(AppRoles.Customer);
+}
+
+<section class="py-24 md:py-32 bg-[#FFFFFF] border-b border-[#E5E5E5]">
+    <div class="max-w-[1240px] mx-auto px-6">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-8 border-b border-[#E5E5E5]">
+            <div>
+                <span class="text-[12px] font-semibold uppercase tracking-[0.25em] text-[#666666] block mb-3">Nhận xét từ bạn đọc</span>
+                <h2 class="text-3xl md:text-5xl font-bold text-[#111111] tracking-tight">Độc giả nói gì?</h2>
+            </div>
+
+            <div class="mt-6 md:mt-0 flex items-center space-x-6">
+                <div>
+                    @if (Model.Count > 0)
+                    {
+                        <div class="text-4xl font-bold text-[#111111]">
+                            @Model.Average.ToString("0.0", CultureInfo.InvariantCulture) <span class="text-xl font-normal text-[#666666]">/ 5</span>
+                        </div>
+                        <div class="text-sm text-[#111111] tracking-wider my-1">@Stars((int)Math.Round(Model.Average))</div>
+                        <div class="text-xs text-[#666666] font-medium">@Model.Count.ToString("N0", new CultureInfo("vi-VN")) đánh giá thực tế</div>
+                    }
+                    else
+                    {
+                        <div class="text-sm text-[#666666] font-medium">Chưa có đánh giá nào</div>
+                    }
+                </div>
+
+                @if (isGuest)
+                {
+                    <a href="~/dang-nhap?returnUrl=%2Fdanh-gia" class="btn-secondary h-[46px] px-6 text-sm whitespace-nowrap">Đăng nhập để đánh giá</a>
+                }
+                else if (isCustomer)
+                {
+                    <button type="button" data-toggle="#review-form-container" class="btn-secondary h-[46px] px-6 text-sm whitespace-nowrap">Viết đánh giá</button>
+                }
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(notice))
+        {
+            <div class="mb-8 p-4 rounded-[8px] border border-[#111111] bg-[#F5F5F5] text-sm font-medium text-[#111111]">@notice</div>
+        }
+
+        @if (isCustomer)
+        {
+            <div id="review-form-container" class="@(Model.ShowForm ? "" : "hidden") mb-16 p-8 border border-[#111111] rounded-[8px] bg-[#F5F5F5] transition-all">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-bold text-[#111111]">Chia sẻ cảm nhận của bạn</h3>
+                    <button type="button" data-toggle="#review-form-container" class="text-sm text-[#666666] hover:text-black cursor-pointer">Đóng</button>
+                </div>
+
+                <form method="post" asp-action="Create" class="space-y-4 max-w-2xl">
+                    <div asp-validation-summary="ModelOnly" class="text-sm text-red-600"></div>
+
+                    <div>
+                        <label asp-for="Form.CustomerName" class="block text-xs font-semibold uppercase tracking-wider text-[#666666] mb-1.5">Họ và tên</label>
+                        <input asp-for="Form.CustomerName" required maxlength="255" placeholder="Nguyễn Văn A" class="custom-input bg-white" />
+                        <span asp-validation-for="Form.CustomerName" class="text-xs text-red-600 mt-1 block"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="Form.Rating" class="block text-xs font-semibold uppercase tracking-wider text-[#666666] mb-1.5">Số sao đánh giá</label>
+                        <select asp-for="Form.Rating" class="custom-input bg-white">
+                            <option value="5">★★★★★ (5/5 sao - Tuyệt tác)</option>
+                            <option value="4">★★★★☆ (4/5 sao - Rất hay)</option>
+                            <option value="3">★★★☆☆ (3/5 sao - Khá)</option>
+                            <option value="2">★★☆☆☆ (2/5 sao - Tạm được)</option>
+                            <option value="1">★☆☆☆☆ (1/5 sao - Chưa hài lòng)</option>
+                        </select>
+                        <span asp-validation-for="Form.Rating" class="text-xs text-red-600 mt-1 block"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="Form.Content" class="block text-xs font-semibold uppercase tracking-wider text-[#666666] mb-1.5">Nội dung đánh giá</label>
+                        <textarea asp-for="Form.Content" required rows="4" minlength="10" maxlength="1000" placeholder="Cảm nghĩ của bạn sau khi đọc cuốn sách này..." class="w-full p-4 border border-[#E5E5E5] rounded-[8px] outline-none focus:border-[#111111] font-sans text-sm bg-white"></textarea>
+                        <span asp-validation-for="Form.Content" class="text-xs text-red-600 mt-1 block"></span>
+                    </div>
+
+                    <button type="submit" class="btn-primary text-sm h-[48px]">Gửi đánh giá</button>
+                </form>
+            </div>
+        }
+
+        <div class="space-y-8 divide-y divide-[#E5E5E5]">
+            @foreach (var (f, index) in Model.Items.Select((item, i) => (item, i)))
+            {
+                <div class="@(index == 0 ? "pt-0" : "pt-8")">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-bold text-[#111111] text-base">@f.CustomerName</span>
+                        <span class="text-xs text-[#666666]">@(f.Badge ?? "Độc giả")</span>
+                    </div>
+                    <div class="text-xs tracking-wider text-[#111111] mb-3">@Stars(f.Rating)</div>
+                    <p class="text-[15px] text-[#666666] leading-relaxed">@f.Content</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>

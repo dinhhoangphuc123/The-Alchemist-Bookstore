@@ -1,0 +1,38 @@
+@model Book
+@{
+    ViewData["Title"] = "Tác giả — NHÀ GIẢ KIM";
+    ViewData["Nav"] = "tac-gia";
+    var portrait = await Settings.GetAsync("author_image");
+}
+
+<section class="py-24 md:py-32 bg-[#F5F5F5] border-b border-[#E5E5E5]">
+    <div class="max-w-[1240px] mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            <div class="lg:col-span-5">
+                @if (!string.IsNullOrWhiteSpace(portrait))
+                {
+                    <div class="border border-[#E5E5E5] rounded-xl overflow-hidden bg-white p-3 shadow-sm">
+                        <img src="@portrait" alt="Chân dung nhà văn @Model.Author" referrerpolicy="no-referrer" class="w-full h-auto object-cover rounded-lg filter grayscale contrast-[1.05]" />
+                    </div>
+                }
+            </div>
+
+            <div class="lg:col-span-7">
+                <span class="text-[12px] font-semibold uppercase tracking-[0.25em] text-[#666666] block mb-3">Về tác giả</span>
+                <h2 class="text-3xl md:text-5xl font-bold text-[#111111] tracking-tight mb-6">@Model.Author</h2>
+
+                <p class="text-[16px] text-[#666666] leading-relaxed mb-6">
+                    Sinh năm 1947 tại Rio de Janeiro, Brazil, Paulo Coelho là một trong những nhà văn được đọc nhiều nhất và có tầm ảnh hưởng sâu sắc nhất của thời đại chúng ta. Các tác phẩm của ông đã được dịch ra hơn 80 ngôn ngữ và phát hành hàng trăm triệu bản trên toàn cầu.
+                </p>
+                <p class="text-[16px] text-[#666666] leading-relaxed mb-8">
+                    Với ngòi bút giản dị mà thấm đượm triết lý nhân sinh, ông truyền cảm hứng cho hàng triệu độc giả dám can đảm theo đuổi vận mệnh cuộc đời và tin tưởng vào những điều kỳ diệu tiềm ẩn trong mỗi con người.
+                </p>
+
+                <div class="p-6 bg-white border border-[#E5E5E5] rounded-[8px]">
+                    <p class="text-base md:text-lg font-medium text-[#111111] leading-relaxed">“Bí quyết của cuộc sống chính là ngã bảy lần và đứng dậy tám lần.”</p>
+                    <span class="block mt-3 text-xs font-semibold text-[#666666] uppercase tracking-wider">— Paulo Coelho</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

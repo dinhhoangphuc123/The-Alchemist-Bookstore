@@ -1,0 +1,179 @@
+@{
+    var nav = ViewData["Nav"] as string ?? "";
+    var isAuth = User.Identity?.IsAuthenticated == true;
+    var isAdmin = User.IsInRole(AppRoles.Admin);
+    var displayName = User.FindFirst("FullName")?.Value ?? User.Identity?.Name ?? "";
+    string NavCss(string key) => nav == key ? "text-[#111111]" : "hover:text-[#111111]";
+
+    var siteEmail = await Settings.GetAsync("site_email", "contact@nhagiakim.vn");
+    var siteHotline = await Settings.GetAsync("site_hotline", "1900 6868 (8:00 - 20:00)");
+    var siteAddress = await Settings.GetAsync("site_address", "Hà Nội & TP. Hồ Chí Minh, Việt Nam");
+}
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(ViewData["Title"] ?? "NHÀ GIẢ KIM — THE ALCHEMIST | Paulo Coelho")</title>
+    <meta name="description" content="Dự án giới thiệu và đặt mua ấn bản bìa cứng đặc biệt kiệt tác Nhà Giả Kim (The Alchemist) của nhà văn Paulo Coelho." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@@tailwindcss/browser@@4"></script>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="selection:bg-neutral-900 selection:text-white">
+<div class="min-h-screen flex flex-col bg-[#FFFFFF] text-[#111111] selection:bg-neutral-900 selection:text-white">
+
+    @* ================= HEADER ================= *@
+    <header id="main-header" class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#E5E5E5] transition-all duration-300">
+        <div id="header-container" class="max-w-[1240px] mx-auto px-6 flex items-center justify-between transition-all duration-300 h-20">
+            <a href="~/" class="group flex flex-col tracking-tight">
+                <span class="font-bold text-base text-[#111111] tracking-wider leading-none">NHÀ GIẢ KIM</span>
+                <span class="text-[11px] font-medium tracking-[0.25em] text-[#666666] mt-1 group-hover:text-black transition-colors">THE ALCHEMIST</span>
+            </a>
+
+            <nav class="hidden lg:flex items-center space-x-10 text-[14px] font-medium text-[#666666]">
+                <a href="~/" class="@NavCss("gioi-thieu") transition-colors">Giới thiệu</a>
+                <a href="~/noi-dung" class="@NavCss("noi-dung") transition-colors">Nội dung</a>
+                <a href="~/tac-gia" class="@NavCss("tac-gia") transition-colors">Tác giả</a>
+                <a href="~/thong-tin" class="@NavCss("thong-tin") transition-colors">Thông tin</a>
+                <a href="~/danh-gia" class="@NavCss("danh-gia") transition-colors">Đánh giá</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                @if (isAuth)
+                {
+                    <div class="hidden lg:flex items-center space-x-5 text-[13px] font-medium text-[#666666]">
+                        @if (isAdmin)
+                        {
+                            <a href="~/quan-tri/don-hang" class="hover:text-[#111111] transition-colors">Đơn hàng</a>
+                            <a href="~/quan-tri/danh-gia" class="hover:text-[#111111] transition-colors">Duyệt đánh giá</a>
+                        }
+                        else
+                        {
+                            <a href="~/don-hang-cua-toi" class="hover:text-[#111111] transition-colors">Đơn hàng của tôi</a>
+                        }
+                        <span class="text-[#111111] font-semibold max-w-[140px] truncate">@displayName</span>
+                        <form method="post" asp-controller="Account" asp-action="Logout">
+                            <button type="submit" class="hover:text-[#111111] transition-colors cursor-pointer">Đăng xuất</button>
+                        </form>
+                    </div>
+                }
+                else
+                {
+                    <a href="~/dang-nhap" class="hidden lg:inline text-[13px] font-medium text-[#666666] hover:text-[#111111] transition-colors">Đăng nhập</a>
+                }
+
+                @if (isAdmin)
+                {
+                    <a href="~/quan-tri/don-hang" class="hidden sm:inline-flex items-center justify-center bg-[#111111] text-white text-[13px] font-semibold tracking-wide uppercase px-6 h-[42px] rounded-[8px] hover:bg-[#2A2A2A] transition-all duration-200 whitespace-nowrap">Quản trị</a>
+                }
+                else
+                {
+                    <a href="~/dat-sach" class="hidden sm:inline-flex items-center justify-center bg-[#111111] text-white text-[13px] font-semibold tracking-wide uppercase px-6 h-[42px] rounded-[8px] hover:bg-[#2A2A2A] transition-all duration-200 whitespace-nowrap">Đặt sách</a>
+                }
+
+                <button id="mobile-toggle" aria-label="Toggle Menu" class="lg:hidden p-2 text-[#111111] focus:outline-none cursor-pointer">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden lg:hidden border-t border-[#E5E5E5] bg-white px-6 py-5 space-y-4">
+            <a href="~/" class="block text-sm font-medium text-[#666666] hover:text-[#111111]">Giới thiệu</a>
+            <a href="~/noi-dung" class="block text-sm font-medium text-[#666666] hover:text-[#111111]">Nội dung</a>
+            <a href="~/tac-gia" class="block text-sm font-medium text-[#666666] hover:text-[#111111]">Tác giả</a>
+            <a href="~/thong-tin" class="block text-sm font-medium text-[#666666] hover:text-[#111111]">Thông tin</a>
+            <a href="~/danh-gia" class="block text-sm font-medium text-[#666666] hover:text-[#111111]">Đánh giá</a>
+
+            <div class="pt-4 border-t border-[#E5E5E5] space-y-4">
+                @if (isAuth)
+                {
+                    <div class="text-xs font-semibold uppercase tracking-wider text-[#111111]">@displayName</div>
+                    @if (isAdmin)
+                    {
+                        <a href="~/quan-tri/don-hang" class="block text-sm font-medium text-[#666666] hover:text-[#111111]">Quản lý đơn hàng</a>
+                        <a href="~/quan-tri/danh-gia" class="block text-sm font-medium text-[#666666] hover:text-[#111111]">Duyệt đánh giá</a>
+                    }
+                    else
+                    {
+                        <a href="~/don-hang-cua-toi" class="block text-sm font-medium text-[#666666] hover:text-[#111111]">Đơn hàng của tôi</a>
+                    }
+                    <form method="post" asp-controller="Account" asp-action="Logout">
+                        <button type="submit" class="text-sm font-medium text-[#666666] hover:text-[#111111] cursor-pointer">Đăng xuất</button>
+                    </form>
+                }
+                else
+                {
+                    <a href="~/dang-nhap" class="block text-sm font-medium text-[#666666] hover:text-[#111111]">Đăng nhập</a>
+                    <a href="~/dang-ky" class="block text-sm font-medium text-[#666666] hover:text-[#111111]">Đăng ký</a>
+                }
+            </div>
+
+            @if (!isAdmin)
+            {
+                <a href="~/dat-sach" class="block w-full text-center bg-[#111111] text-white py-3 rounded-[8px] text-sm font-semibold tracking-wide">ĐẶT SÁCH NGAY</a>
+            }
+        </div>
+    </header>
+
+    <main class="flex-1">
+        @RenderBody()
+    </main>
+
+    @* ================= FOOTER ================= *@
+    <footer class="bg-[#111111] text-white border-t border-neutral-800 pt-16 pb-12">
+        <div class="max-w-[1240px] mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-neutral-800">
+                <div>
+                    <span class="font-bold text-lg tracking-wider text-white block">NHÀ GIẢ KIM</span>
+                    <span class="text-xs font-medium tracking-[0.25em] text-neutral-400 block mt-1 mb-6">THE ALCHEMIST</span>
+                    <p class="text-sm text-neutral-400 leading-relaxed">
+                        Dự án giới thiệu và tôn vinh kiệt tác văn học kinh điển của Paulo Coelho với diện mạo thiết kế đương đại.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400 mb-5">Khám phá</h4>
+                    <ul class="space-y-3 text-sm text-neutral-300">
+                        <li><a href="~/" class="hover:text-white transition-colors">Giới thiệu</a></li>
+                        <li><a href="~/noi-dung" class="hover:text-white transition-colors">Nội dung</a></li>
+                        <li><a href="~/tac-gia" class="hover:text-white transition-colors">Tác giả</a></li>
+                        <li><a href="~/thong-tin" class="hover:text-white transition-colors">Thông tin sách</a></li>
+                        <li><a href="~/danh-gia" class="hover:text-white transition-colors">Đánh giá</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400 mb-5">Liên hệ</h4>
+                    <ul class="space-y-3 text-sm text-neutral-300">
+                        <li>@siteEmail</li>
+                        <li>@siteHotline</li>
+                        <li>@siteAddress</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400 mb-5">Mạng xã hội</h4>
+                    <ul class="space-y-3 text-sm text-neutral-300">
+                        <li><a href="~/" class="hover:text-white transition-colors">Facebook</a></li>
+                        <li><a href="~/" class="hover:text-white transition-colors">Instagram</a></li>
+                    </ul>
+                    <p class="text-xs text-neutral-500 mt-6 leading-relaxed">Tôn trọng bản quyền tác giả và quyền dịch thuật.</p>
+                </div>
+            </div>
+
+            <div class="pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-neutral-500">
+                <p>© 2026 THE ALCHEMIST — Paulo Coelho. Thiết kế bản quyền theo tiêu chuẩn Modern Minimal.</p>
+                <p class="mt-4 sm:mt-0">Đơn vị phân phối bản quyền chính thức</p>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>

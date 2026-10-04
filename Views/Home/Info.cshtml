@@ -1,0 +1,43 @@
+@model Book
+@{
+    ViewData["Title"] = "Thông tin sách — NHÀ GIẢ KIM";
+    ViewData["Nav"] = "thong-tin";
+
+    var year = Model.PublishedAt?.Year.ToString() ?? "—";
+    if (!string.IsNullOrWhiteSpace(Model.FileRemark)) { year += $" ({Model.FileRemark})"; }
+
+    var rows = new List<(string Label, string Value)>
+    {
+        ("Tên sách", Model.Name),
+        ("Tác giả", Model.Author),
+        ("Thể loại", Model.Category ?? "—"),
+        ("Ngôn ngữ", await Settings.GetAsync("book_language", "Tiếng Việt (Bản dịch chuẩn)")),
+        ("Định dạng bìa", await Settings.GetAsync("book_cover", "Bìa cứng cao cấp (Hardcover)")),
+        ("Số trang", await Settings.GetAsync("book_pages", "228 trang")),
+        ("Nhà xuất bản", Model.Press ?? "—"),
+        ("Năm xuất bản", year)
+    };
+}
+
+<section class="py-24 md:py-32 bg-[#FFFFFF] border-b border-[#E5E5E5]">
+    <div class="max-w-[1240px] mx-auto px-6">
+        <div class="max-w-2xl mb-12">
+            <span class="text-[12px] font-semibold uppercase tracking-[0.25em] text-[#666666] block mb-3">Quy cách ấn phẩm</span>
+            <h2 class="text-3xl md:text-4xl font-bold text-[#111111] tracking-tight">Thông tin sách</h2>
+        </div>
+
+        <div class="max-w-3xl divide-y divide-[#E5E5E5] border-t border-b border-[#E5E5E5]">
+            @foreach (var r in rows)
+            {
+                <div class="py-4 flex flex-col sm:flex-row justify-between sm:items-center">
+                    <span class="text-sm font-medium text-[#666666]">@r.Label</span>
+                    <span class="text-sm font-semibold text-[#111111] mt-1 sm:mt-0">@r.Value</span>
+                </div>
+            }
+            <div class="py-4 flex flex-col sm:flex-row justify-between sm:items-center">
+                <span class="text-sm font-medium text-[#666666]">Giá bán niêm yết</span>
+                <span class="text-base font-bold text-[#111111] mt-1 sm:mt-0">@Vnd.Format(Model.SalePrice)</span>
+            </div>
+        </div>
+    </div>
+</section>

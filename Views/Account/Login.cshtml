@@ -1,0 +1,44 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Đăng nhập — NHÀ GIẢ KIM";
+    ViewData["Nav"] = "login";
+    var returnUrl = ViewData["ReturnUrl"] as string;
+}
+
+<section class="py-24 md:py-32 bg-[#F5F5F5] border-b border-[#E5E5E5]">
+    <div class="max-w-md mx-auto px-6">
+        <div class="bg-white p-8 md:p-10 rounded-[8px] border border-[#E5E5E5]">
+            <h1 class="text-2xl font-bold mb-2 tracking-tight">Đăng nhập</h1>
+            <p class="text-sm text-[#666666] mb-8">Đăng nhập để đặt sách, theo dõi đơn hàng và chia sẻ đánh giá.</p>
+
+            <form method="post" asp-action="Login" class="space-y-5">
+                <input type="hidden" name="returnUrl" value="@returnUrl" />
+                <div asp-validation-summary="ModelOnly" class="text-sm text-red-600"></div>
+
+                <div>
+                    <label asp-for="Username" class="block text-xs font-semibold uppercase tracking-wider text-[#666666] mb-1.5">Tên đăng nhập</label>
+                    <input asp-for="Username" required autocomplete="username" class="custom-input" />
+                    <span asp-validation-for="Username" class="text-xs text-red-600 mt-1 block"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Password" class="block text-xs font-semibold uppercase tracking-wider text-[#666666] mb-1.5">Mật khẩu</label>
+                    <input asp-for="Password" type="password" required autocomplete="current-password" class="custom-input" />
+                    <span asp-validation-for="Password" class="text-xs text-red-600 mt-1 block"></span>
+                </div>
+
+                <label class="flex items-center gap-2 text-sm text-[#666666] cursor-pointer">
+                    <input asp-for="RememberMe" type="checkbox" class="w-4 h-4 accent-[#111111]" />
+                    Ghi nhớ đăng nhập
+                </label>
+
+                <button type="submit" class="w-full bg-[#111111] text-white h-[52px] rounded-[8px] font-semibold text-base uppercase tracking-wider hover:bg-[#2A2A2A] transition-all duration-200 cursor-pointer">Đăng nhập</button>
+            </form>
+
+            <p class="text-sm text-[#666666] mt-6 text-center">
+                Chưa có tài khoản?
+                <a href="~/dang-ky?returnUrl=@Uri.EscapeDataString(returnUrl ?? "")" class="font-semibold text-[#111111] underline">Đăng ký ngay</a>
+            </p>
+        </div>
+    </div>
+</section>

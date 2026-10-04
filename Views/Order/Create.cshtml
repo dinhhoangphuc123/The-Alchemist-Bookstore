@@ -1,0 +1,121 @@
+@model OrderPageViewModel
+@{
+    ViewData["Title"] = "Đặt sách — NHÀ GIẢ KIM";
+    ViewData["Nav"] = "dat-sach";
+
+    var doneCode = TempData["OrderCode"] as string;
+    var doneName = TempData["OrderName"] as string;
+    var doneQty = TempData["OrderQty"];
+    var doneTotal = TempData["OrderTotal"] as string;
+}
+
+<section class="py-24 md:py-32 bg-[#111111] text-white">
+    <div class="max-w-[1240px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+
+        @* ---- CTA + tóm tắt đơn (trái) ---- *@
+        <div class="lg:col-span-5">
+            <span class="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-400 block mb-4">Khởi đầu</span>
+            <h2 class="text-4xl md:text-5xl font-bold tracking-tight mb-6 leading-tight">Bắt đầu hành trình của riêng bạn.</h2>
+            <p class="text-base text-neutral-400 leading-relaxed mb-8">
+                Đặt Nhà giả kim và bắt đầu hành trình khám phá của riêng bạn. Cuốn sách chứa đựng những thông điệp vượt thời gian về ước mơ và niềm tin.
+            </p>
+
+            <div id="order-summary" data-unit-price="@((long)Model.Book.SalePrice)" class="p-6 rounded-[8px] border border-neutral-800 bg-[#1C1C1C] space-y-4">
+                <div class="flex justify-between items-center pb-3 border-b border-neutral-800 text-sm">
+                    <span class="text-neutral-400">Tên sách</span>
+                    <span class="font-medium text-white">@(Model.Book.Title ?? Model.Book.Name) (Hardcover)</span>
+                </div>
+                <div class="flex justify-between items-center pb-3 border-b border-neutral-800 text-sm">
+                    <span class="text-neutral-400">Đơn giá ưu đãi</span>
+                    <span class="font-medium text-white">@Vnd.Format(Model.Book.SalePrice)</span>
+                </div>
+                <div class="flex justify-between items-center pb-3 border-b border-neutral-800 text-sm">
+                    <span class="text-neutral-400">Số lượng</span>
+                    <div class="flex items-center space-x-3 text-white">
+                        <button type="button" data-qty="-1" class="w-7 h-7 border border-neutral-700 rounded flex items-center justify-center hover:bg-neutral-800 cursor-pointer">-</button>
+                        <span id="qty-display" class="font-semibold text-sm">@Model.Form.Quantity</span>
+                        <button type="button" data-qty="1" class="w-7 h-7 border border-neutral-700 rounded flex items-center justify-center hover:bg-neutral-800 cursor-pointer">+</button>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center pt-2">
+                    <span class="font-semibold text-neutral-300">Tổng thanh toán:</span>
+                    <span id="total-price" class="text-2xl font-bold text-white">@Vnd.Format(Model.Book.SalePrice * Model.Form.Quantity)</span>
+                </div>
+            </div>
+
+            <div class="mt-6 text-xs text-neutral-500 leading-relaxed">
+                * Đơn hàng được đóng gói hộp quà chống va đập cao cấp kèm bookmark tối giản giới hạn.
+            </div>
+        </div>
+
+        @* ---- Form (phải) ---- *@
+        <div class="lg:col-span-7 bg-white text-[#111111] p-8 md:p-10 rounded-[8px] border border-[#E5E5E5]">
+            <h3 class="text-2xl font-bold mb-2 tracking-tight">Thông tin nhận sách</h3>
+            <p class="text-sm text-[#666666] mb-8">Vui lòng điền thông tin bên dưới để hoàn tất việc đăng ký sở hữu ấn bản.</p>
+
+            <form method="post" asp-action="Create" class="space-y-5">
+                <div asp-validation-summary="ModelOnly" class="text-sm text-red-600"></div>
+                <input type="hidden" asp-for="Form.Quantity" data-qty-input />
+
+                <div>
+                    <label asp-for="Form.CustomerName" class="block text-xs font-semibold uppercase tracking-wider text-[#666666] mb-1.5">Họ và tên</label>
+                    <input asp-for="Form.CustomerName" required maxlength="255" placeholder="Nguyễn Văn A" class="custom-input" />
+                    <span asp-validation-for="Form.CustomerName" class="text-xs text-red-600 mt-1 block"></span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label asp-for="Form.Phone" class="block text-xs font-semibold uppercase tracking-wider text-[#666666] mb-1.5">Số điện thoại</label>
+                        <input asp-for="Form.Phone" type="tel" inputmode="numeric" data-digits required maxlength="10" pattern="0[0-9]{9}" title="Số điện thoại gồm đúng 10 chữ số, bắt đầu bằng số 0" placeholder="0912345678" class="custom-input" />
+                        <span asp-validation-for="Form.Phone" class="text-xs text-red-600 mt-1 block"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Form.PaymentMethod" class="block text-xs font-semibold uppercase tracking-wider text-[#666666] mb-1.5">Phương thức thanh toán</label>
+                        <select asp-for="Form.PaymentMethod" class="custom-input bg-white">
+                            <option value="COD">Thanh toán khi nhận hàng (COD)</option>
+                            <option value="Banking">Chuyển khoản ngân hàng</option>
+                        </select>
+                        <span asp-validation-for="Form.PaymentMethod" class="text-xs text-red-600 mt-1 block"></span>
+                    </div>
+                </div>
+
+                <div>
+                    <label asp-for="Form.Address" class="block text-xs font-semibold uppercase tracking-wider text-[#666666] mb-1.5">Địa chỉ nhận hàng</label>
+                    <input asp-for="Form.Address" required minlength="10" maxlength="500" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố" class="custom-input" />
+                    <span asp-validation-for="Form.Address" class="text-xs text-red-600 mt-1 block"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Form.Note" class="block text-xs font-semibold uppercase tracking-wider text-[#666666] mb-1.5">Ghi chú (tùy chọn)</label>
+                    <input asp-for="Form.Note" maxlength="500" placeholder="Ví dụ: Giao giờ hành chính..." class="custom-input" />
+                    <span asp-validation-for="Form.Note" class="text-xs text-red-600 mt-1 block"></span>
+                </div>
+
+                <button type="submit" class="w-full bg-[#111111] text-white h-[52px] rounded-[8px] font-semibold text-base uppercase tracking-wider hover:bg-[#2A2A2A] transition-all duration-200 mt-4 cursor-pointer">ĐẶT SÁCH</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+@* ================= MODAL ĐẶT HÀNG THÀNH CÔNG ================= *@
+@if (!string.IsNullOrEmpty(doneCode))
+{
+    <div id="success-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white text-[#111111] max-w-md w-full p-8 rounded-[8px] border border-[#E5E5E5] text-center shadow-2xl">
+            <div class="w-12 h-12 bg-[#F5F5F5] border border-[#E5E5E5] rounded-full flex items-center justify-center mx-auto mb-5">
+                <span class="text-xl font-bold">✓</span>
+            </div>
+            <h3 class="text-2xl font-bold mb-2 tracking-tight">Đặt hàng thành công</h3>
+            <p class="text-sm font-semibold text-[#111111] bg-[#F5F5F5] py-2 px-4 rounded-[6px] inline-block mb-4">Mã đơn hàng: #@doneCode</p>
+            <p class="text-sm text-[#666666] leading-relaxed mb-6">
+                Cảm ơn <span class="font-semibold text-[#111111]">@doneName</span> đã đặt
+                <span class="font-semibold text-[#111111]">@doneQty cuốn</span> (Tổng: @doneTotal).
+                Bộ phận phát hành sẽ liên hệ qua số điện thoại để xác nhận trước khi chuyển phát tới bạn.
+            </p>
+            <div class="flex flex-col gap-3">
+                <a href="~/don-hang-cua-toi" class="btn-primary text-sm h-[48px]">Xem đơn hàng của tôi</a>
+                <button type="button" data-close="#success-modal" class="btn-secondary text-sm h-[48px]">Đóng</button>
+            </div>
+        </div>
+    </div>
+}

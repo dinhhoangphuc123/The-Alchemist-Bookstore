@@ -1,0 +1,152 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0F06DACC-C4EB-4B17-D001-C31D296F21CE}|The Alchemist Bookstore.csproj|d:\\lap trinh web\\the alchemist bookstore\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{0F06DACC-C4EB-4B17-D001-C31D296F21CE}|The Alchemist Bookstore.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0F06DACC-C4EB-4B17-D001-C31D296F21CE}|The Alchemist Bookstore.csproj|d:\\lap trinh web\\the alchemist bookstore\\models\\ef\\dbseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0F06DACC-C4EB-4B17-D001-C31D296F21CE}|The Alchemist Bookstore.csproj|solutionrelative:models\\ef\\dbseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0F06DACC-C4EB-4B17-D001-C31D296F21CE}|The Alchemist Bookstore.csproj|d:\\lap trinh web\\the alchemist bookstore\\models\\ef\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0F06DACC-C4EB-4B17-D001-C31D296F21CE}|The Alchemist Bookstore.csproj|solutionrelative:models\\ef\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0F06DACC-C4EB-4B17-D001-C31D296F21CE}|The Alchemist Bookstore.csproj|d:\\lap trinh web\\the alchemist bookstore\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0F06DACC-C4EB-4B17-D001-C31D296F21CE}|The Alchemist Bookstore.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0F06DACC-C4EB-4B17-D001-C31D296F21CE}|The Alchemist Bookstore.csproj|d:\\lap trinh web\\the alchemist bookstore\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0F06DACC-C4EB-4B17-D001-C31D296F21CE}|The Alchemist Bookstore.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0F06DACC-C4EB-4B17-D001-C31D296F21CE}|The Alchemist Bookstore.csproj|d:\\lap trinh web\\the alchemist bookstore\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{0F06DACC-C4EB-4B17-D001-C31D296F21CE}|The Alchemist Bookstore.csproj|solutionrelative:wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0F06DACC-C4EB-4B17-D001-C31D296F21CE}|The Alchemist Bookstore.csproj|d:\\lap trinh web\\the alchemist bookstore\\wwwroot\\js\\site.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{0F06DACC-C4EB-4B17-D001-C31D296F21CE}|The Alchemist Bookstore.csproj|solutionrelative:wwwroot\\js\\site.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0F06DACC-C4EB-4B17-D001-C31D296F21CE}|The Alchemist Bookstore.csproj|d:\\lap trinh web\\the alchemist bookstore\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{0F06DACC-C4EB-4B17-D001-C31D296F21CE}|The Alchemist Bookstore.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DbSeeder.cs",
+              "DocumentMoniker": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\Models\\EF\\DbSeeder.cs",
+              "RelativeDocumentMoniker": "Models\\EF\\DbSeeder.cs",
+              "ToolTip": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\Models\\EF\\DbSeeder.cs",
+              "RelativeToolTip": "Models\\EF\\DbSeeder.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-03T16:25:28.219Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\Models\\EF\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Models\\EF\\ApplicationDbContext.cs",
+              "ToolTip": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\Models\\EF\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Models\\EF\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-03T16:23:44.42Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-03T16:15:18.125Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-10-03T16:14:59.106Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
+              "ToolTip": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAzwA8AAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-03T16:11:05.144Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "site.css",
+              "DocumentMoniker": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
+              "ToolTip": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "wwwroot\\css\\site.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-10-03T16:09:52.296Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "site.js",
+              "DocumentMoniker": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\wwwroot\\js\\site.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\site.js",
+              "ToolTip": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\wwwroot\\js\\site.js",
+              "RelativeToolTip": "wwwroot\\js\\site.js",
+              "ViewState": "AgIAADAAAAAAAAAAAAAkwD0AAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-10-03T16:09:21.212Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "Properties\\launchSettings.json",
+              "ToolTip": "D:\\LAP TRINH WEB\\The Alchemist Bookstore\\Properties\\launchSettings.json",
+              "RelativeToolTip": "Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-10-03T16:08:55.847Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

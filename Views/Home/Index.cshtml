@@ -1,0 +1,79 @@
+@model Book
+@{
+    ViewData["Title"] = "NHÀ GIẢ KIM — THE ALCHEMIST | Paulo Coelho";
+    ViewData["Nav"] = "gioi-thieu";
+    var shipping = await Settings.GetAsync("shipping_info", "Toàn quốc trong 2-3 ngày");
+}
+
+@* ================= HERO ================= *@
+<section class="py-16 md:py-28 bg-[#FFFFFF] border-b border-[#E5E5E5]">
+    <div class="max-w-[1240px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        <div class="lg:col-span-7 flex flex-col justify-center order-1">
+            <span class="text-[13px] font-semibold tracking-[0.2em] uppercase text-[#666666] mb-4">@Model.Author.ToUpperInvariant()</span>
+
+            <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-[76px] font-bold text-[#111111] tracking-tight leading-[1.05] mb-6">
+                @((Model.Title ?? Model.Name).ToUpperInvariant())
+            </h1>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Subtitle))
+            {
+                <blockquote class="text-xl sm:text-2xl font-normal text-[#111111] leading-relaxed mb-6 border-l-2 border-[#111111] pl-5">
+                    @Model.Subtitle
+                </blockquote>
+            }
+
+            <p class="text-[16px] text-[#666666] leading-relaxed max-w-xl mb-8">@Model.Description</p>
+
+            <div class="flex items-center space-x-4 mb-9">
+                <span class="text-3xl font-bold text-[#111111]">@Vnd.Format(Model.SalePrice)</span>
+                @if (Model.DiscountPercent > 0)
+                {
+                    <span class="text-lg text-[#666666] line-through font-normal">@Vnd.Format(Model.Price)</span>
+                    <span class="inline-block bg-[#111111] text-white text-[12px] font-semibold px-2.5 py-1 rounded-[4px] tracking-wide">-@(Model.DiscountPercent)%</span>
+                }
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                <a href="~/dat-sach" class="btn-primary text-center">Đặt sách ngay</a>
+                <a href="~/noi-dung" class="btn-secondary text-center">Khám phá cuốn sách</a>
+            </div>
+
+            <div class="mt-8 pt-8 border-t border-[#E5E5E5] flex flex-wrap gap-8 text-[13px] text-[#666666]">
+                <div><span class="text-[#111111] font-semibold">Giao hàng:</span> @shipping</div>
+                <div><span class="text-[#111111] font-semibold">Bìa cứng:</span> Phiên bản đặc biệt</div>
+                <div><span class="text-[#111111] font-semibold">Tình trạng:</span> Còn hàng trong kho</div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-5 flex justify-center items-center order-2">
+            <div class="relative w-full max-w-[420px] group">
+                <div class="aspect-[3/4] bg-[#F5F5F5] rounded-xl overflow-hidden shadow-2xl transition-all duration-500 ease-out group-hover:scale-[1.015] border border-[#E5E5E5]/70 flex items-center justify-center p-3">
+                    @if (!string.IsNullOrWhiteSpace(Model.Image))
+                    {
+                        <img src="@Model.Image" alt="Ấn bản cao cấp Nhà Giả Kim - The Alchemist" referrerpolicy="no-referrer" class="w-full h-full object-contain drop-shadow-lg" />
+                    }
+                </div>
+                <div class="text-center mt-4">
+                    <span class="text-[12px] uppercase tracking-widest text-[#666666]">Hardcover Collector's Edition</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* ================= MEDIA / TRUST ================= *@
+<section class="py-12 bg-[#F5F5F5] border-b border-[#E5E5E5]">
+    <div class="max-w-[1240px] mx-auto px-6">
+        <div class="text-center mb-8">
+            <h2 class="text-xs font-semibold uppercase tracking-[0.25em] text-[#666666]">ĐƯỢC NHẮC ĐẾN BỞI</h2>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 items-center justify-center text-center">
+            @foreach (var media in new[] { "The New York Times", "The Guardian", "Le Monde", "BBC Culture" })
+            {
+                <div class="py-3 px-4 border border-[#E5E5E5] bg-white rounded-[6px]">
+                    <span class="text-sm font-semibold text-[#111111] tracking-wider uppercase">@media</span>
+                </div>
+            }
+        </div>
+    </div>
+</section>

@@ -1,0 +1,57 @@
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Đăng ký — NHÀ GIẢ KIM";
+    ViewData["Nav"] = "login";
+    var returnUrl = ViewData["ReturnUrl"] as string;
+}
+
+<section class="py-24 md:py-32 bg-[#F5F5F5] border-b border-[#E5E5E5]">
+    <div class="max-w-md mx-auto px-6">
+        <div class="bg-white p-8 md:p-10 rounded-[8px] border border-[#E5E5E5]">
+            <h1 class="text-2xl font-bold mb-2 tracking-tight">Đăng ký tài khoản</h1>
+            <p class="text-sm text-[#666666] mb-8">Tạo tài khoản khách hàng để đặt sách và theo dõi đơn hàng.</p>
+
+            <form method="post" asp-action="Register" class="space-y-5">
+                <input type="hidden" name="returnUrl" value="@returnUrl" />
+                <div asp-validation-summary="ModelOnly" class="text-sm text-red-600"></div>
+
+                <div>
+                    <label asp-for="FullName" class="block text-xs font-semibold uppercase tracking-wider text-[#666666] mb-1.5">Họ và tên</label>
+                    <input asp-for="FullName" required maxlength="255" placeholder="Nguyễn Văn A" class="custom-input" />
+                    <span asp-validation-for="FullName" class="text-xs text-red-600 mt-1 block"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Username" class="block text-xs font-semibold uppercase tracking-wider text-[#666666] mb-1.5">Tên đăng nhập</label>
+                    <input asp-for="Username" required pattern="[a-zA-Z0-9_]{4,50}" title="4–50 ký tự: chữ không dấu, số, dấu gạch dưới" autocomplete="username" class="custom-input" />
+                    <span asp-validation-for="Username" class="text-xs text-red-600 mt-1 block"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Email" class="block text-xs font-semibold uppercase tracking-wider text-[#666666] mb-1.5">Email</label>
+                    <input asp-for="Email" type="email" required maxlength="255" autocomplete="email" class="custom-input" />
+                    <span asp-validation-for="Email" class="text-xs text-red-600 mt-1 block"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Password" class="block text-xs font-semibold uppercase tracking-wider text-[#666666] mb-1.5">Mật khẩu</label>
+                    <input asp-for="Password" type="password" required minlength="6" autocomplete="new-password" class="custom-input" />
+                    <span asp-validation-for="Password" class="text-xs text-red-600 mt-1 block"></span>
+                </div>
+
+                <div>
+                    <label asp-for="ConfirmPassword" class="block text-xs font-semibold uppercase tracking-wider text-[#666666] mb-1.5">Nhập lại mật khẩu</label>
+                    <input asp-for="ConfirmPassword" type="password" required autocomplete="new-password" class="custom-input" />
+                    <span asp-validation-for="ConfirmPassword" class="text-xs text-red-600 mt-1 block"></span>
+                </div>
+
+                <button type="submit" class="w-full bg-[#111111] text-white h-[52px] rounded-[8px] font-semibold text-base uppercase tracking-wider hover:bg-[#2A2A2A] transition-all duration-200 cursor-pointer">Đăng ký</button>
+            </form>
+
+            <p class="text-sm text-[#666666] mt-6 text-center">
+                Đã có tài khoản?
+                <a href="~/dang-nhap?returnUrl=@Uri.EscapeDataString(returnUrl ?? "")" class="font-semibold text-[#111111] underline">Đăng nhập</a>
+            </p>
+        </div>
+    </div>
+</section>

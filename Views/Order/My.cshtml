@@ -1,0 +1,52 @@
+@model List<Order>
+@{
+    ViewData["Title"] = "Đơn hàng của tôi — NHÀ GIẢ KIM";
+    ViewData["Nav"] = "don-hang";
+}
+
+<section class="py-24 md:py-28 bg-[#F5F5F5] border-b border-[#E5E5E5]">
+    <div class="max-w-[1240px] mx-auto px-6">
+        <div class="max-w-2xl mb-12">
+            <span class="text-[12px] font-semibold uppercase tracking-[0.25em] text-[#666666] block mb-3">Tài khoản</span>
+            <h1 class="text-3xl md:text-4xl font-bold text-[#111111] tracking-tight">Đơn hàng của tôi</h1>
+        </div>
+
+        @if (Model.Count == 0)
+        {
+            <div class="p-10 bg-white border border-[#E5E5E5] rounded-[8px] text-center">
+                <p class="text-sm text-[#666666] mb-6">Bạn chưa có đơn hàng nào.</p>
+                <a href="~/dat-sach" class="btn-primary text-sm h-[48px]">Đặt sách ngay</a>
+            </div>
+        }
+        else
+        {
+            <div class="space-y-5">
+                @foreach (var o in Model)
+                {
+                    <div class="p-6 md:p-8 bg-white border border-[#E5E5E5] rounded-[8px]">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-4 border-b border-[#E5E5E5]">
+                            <div>
+                                <div class="text-base font-bold text-[#111111]">#@o.OrderCode</div>
+                                <div class="text-xs text-[#666666] mt-1">Đặt lúc @o.OrderTime.ToString("HH:mm dd/MM/yyyy")</div>
+                            </div>
+                            <span class="@OrderStatusNames.BadgeCss(o.Status.StatusName) text-xs font-semibold px-3 py-1.5 rounded-[4px] tracking-wide self-start sm:self-auto">@o.Status.StatusName</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-3 text-sm">
+                            <div class="flex justify-between"><span class="text-[#666666]">Sản phẩm</span><span class="font-semibold text-[#111111]">@(o.Book.Title ?? o.Book.Name) × @o.Quantity</span></div>
+                            <div class="flex justify-between"><span class="text-[#666666]">Tổng thanh toán</span><span class="font-bold text-[#111111]">@Vnd.Format(o.TotalAmount)</span></div>
+                            <div class="flex justify-between"><span class="text-[#666666]">Người nhận</span><span class="font-semibold text-[#111111]">@o.CustomerName</span></div>
+                            <div class="flex justify-between"><span class="text-[#666666]">Số điện thoại</span><span class="font-semibold text-[#111111]">@o.Phone</span></div>
+                            <div class="flex justify-between"><span class="text-[#666666]">Thanh toán</span><span class="font-semibold text-[#111111]">@(o.PaymentMethod == "COD" ? "Khi nhận hàng (COD)" : "Chuyển khoản")</span></div>
+                            <div class="flex justify-between gap-4"><span class="text-[#666666] shrink-0">Địa chỉ</span><span class="font-semibold text-[#111111] text-right">@o.Address</span></div>
+                            @if (!string.IsNullOrWhiteSpace(o.Note))
+                            {
+                                <div class="flex justify-between gap-4 md:col-span-2"><span class="text-[#666666] shrink-0">Ghi chú</span><span class="text-[#111111] text-right">@o.Note</span></div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
