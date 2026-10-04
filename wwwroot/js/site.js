@@ -40,12 +40,14 @@
     });
   });
 
-  // ---- Vòng tròn quay khi gửi form có data-loading (đăng nhập / đăng ký / đăng xuất) ----
+  // ---- Vòng tròn quay cho MỌI thao tác chuyển trang (liên kết + gửi form) ----
   var overlay = document.getElementById('loading-overlay');
   var overlayText = document.getElementById('loading-text');
+  var busy = false;                              // đang chuyển trang -> chặn bấm lặp
+
   function showLoading(text) {
     if (!overlay) return;
-    overlayText.textContent = text || 'Đang xử lý...';
+    overlayText.textContent = text || 'Đang tải trang...';
     overlay.classList.remove('hidden');
     overlay.classList.add('flex');
   }
@@ -53,22 +55,53 @@
     if (!overlay) return;
     overlay.classList.add('hidden');
     overlay.classList.remove('flex');
+    busy = false;
   }
-  document.querySelectorAll('form[data-loading]').forEach(function (form) {
-    form.addEventListener('submit', function (e) {
-      if (form.getAttribute('data-submitting') === '1') return;
-      e.preventDefault();                       // chỉ chạy khi form đã qua kiểm tra HTML5
-      form.setAttribute('data-submitting', '1');
-      showLoading(form.getAttribute('data-loading'));
-      setTimeout(function () { form.submit(); }, 800);   // cho người dùng kịp thấy vòng quay
-    });
+
+  // Liên kết nội bộ (menu, nút "Đặt sách", "Mua lại", tab lọc đơn, footer...)
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a || a.hasAttribute('data-no-loading') || a.hasAttribute('download')) return;
+    if (a.target && a.target !== '_self') return;
+
+    var href = a.getAttribute('href') || '';
+    if (href.charAt(0) === '#' || /^(mailto:|tel:|javascript:)/i.test(href)) return;
+    if (a.origin !== window.location.origin) return;
+    if (a.pathname === window.location.pathname && a.search === window.location.search && a.hash) return; // chỉ nhảy neo trong trang
+
+    e.preventDefault();
+    if (busy) return;
+    busy = true;
+    showLoading(a.getAttribute('data-loading') || 'Đang tải trang...');
+    setTimeout(function () { window.location.href = a.href; }, 500);
   });
+
+  // Mọi form (đăng nhập/đăng ký/đăng xuất, đặt sách, gửi đánh giá, cập nhật trạng thái đơn...)
+  document.addEventListener('submit', function (e) {
+    var form = e.target;
+    if (!form || form.tagName !== 'FORM' || form.hasAttribute('data-no-loading')) return;
+    if (e.defaultPrevented) return;              // vd. confirm() bị người dùng bấm Hủy
+
+    e.preventDefault();                           // sự kiện này chỉ chạy khi form đã qua kiểm tra HTML5
+    if (busy) return;
+    busy = true;
+
+    var text = form.getAttribute('data-loading');
+    if (!text) {
+      var action = form.getAttribute('action') || '';
+      if (action.indexOf('/dat-sach') !== -1) text = 'Đang đặt sách...';
+      else if (action.indexOf('/danh-gia') !== -1) text = 'Đang gửi đánh giá...';
+      else if (action.indexOf('/trang-thai') !== -1) text = 'Đang cập nhật đơn hàng...';
+      else text = 'Đang xử lý...';
+    }
+    showLoading(text);
+    setTimeout(function () { form.submit(); }, 700);   // cho người dùng kịp thấy vòng quay
+  });
+
   // Bấm nút Back của trình duyệt: tắt overlay nếu trang được lấy lại từ cache
   window.addEventListener('pageshow', function (e) {
-    if (e.persisted) {
-      hideLoading();
-      document.querySelectorAll('form[data-submitting]').forEach(function (f) { f.removeAttribute('data-submitting'); });
-    }
+    if (e.persisted) hideLoading();
   });
 
   // ---- Ô số điện thoại: chỉ nhận chữ số, tối đa 10 ----
