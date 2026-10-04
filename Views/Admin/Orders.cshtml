@@ -12,6 +12,25 @@
 
 <section class="py-16 md:py-20 bg-[#F5F5F5] border-b border-[#E5E5E5]">
     <div class="max-w-[1240px] mx-auto px-6">
+        @* ================= THỐNG KÊ ================= *@
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
+            <div class="bg-white border border-[#E5E5E5] rounded-[8px] p-6">
+                <div class="text-xs font-semibold uppercase tracking-wider text-[#666666]">Số cuốn đã đặt</div>
+                <div class="mt-3 text-3xl font-bold text-[#111111] tracking-tight">@Model.TotalQuantity.ToString("N0", new CultureInfo("vi-VN"))</div>
+                <div class="mt-1 text-xs text-[#999999]">Không tính đơn đã hủy</div>
+            </div>
+            <div class="bg-white border border-[#E5E5E5] rounded-[8px] p-6">
+                <div class="text-xs font-semibold uppercase tracking-wider text-[#666666]">Số đánh giá</div>
+                <div class="mt-3 text-3xl font-bold text-[#111111] tracking-tight">@Model.FeedbackCount.ToString("N0", new CultureInfo("vi-VN"))</div>
+                <div class="mt-1 text-xs text-[#999999]">Tất cả đánh giá của bạn đọc</div>
+            </div>
+            <div class="bg-white border border-[#E5E5E5] rounded-[8px] p-6">
+                <div class="text-xs font-semibold uppercase tracking-wider text-[#666666]">Doanh thu</div>
+                <div class="mt-3 text-3xl font-bold text-[#111111] tracking-tight">@Vnd.Format(Model.TotalRevenue)</div>
+                <div class="mt-1 text-xs text-[#999999]">Không tính đơn đã hủy</div>
+            </div>
+        </div>
+
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
             <div>
                 <span class="text-[12px] font-semibold uppercase tracking-[0.25em] text-[#666666] block mb-3">Khu vực quản trị</span>

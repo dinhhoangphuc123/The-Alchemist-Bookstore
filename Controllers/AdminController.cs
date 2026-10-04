@@ -26,8 +26,13 @@ public class AdminController : Controller
         if (statusId.HasValue)
             query = query.Where(o => o.StatusId == statusId.Value);
 
+        var valid = _db.Orders.Where(o => o.Status.StatusName != OrderStatusNames.Cancelled);
+
         var vm = new AdminOrdersViewModel
         {
+            TotalQuantity = await valid.SumAsync(o => o.Quantity),
+            TotalRevenue = await valid.SumAsync(o => o.TotalAmount),
+            FeedbackCount = await _db.Feedbacks.CountAsync(),
             FilterStatusId = statusId,
             Statuses = await _db.OrderStatuses.AsNoTracking().OrderBy(s => s.StatusId).ToListAsync(),
             Orders = await query.OrderByDescending(o => o.OrderTime).ToListAsync(),
