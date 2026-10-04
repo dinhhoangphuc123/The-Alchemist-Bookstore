@@ -39,8 +39,4 @@ public class ApplicationDbContext : DbContext
             .HasOne(f => f.Book).WithMany(b => b.Feedbacks)
             .HasForeignKey(f => f.BookId).OnDelete(DeleteBehavior.Cascade);
     }
-
-    /// <summary>Website chỉ bán 1 cuốn: lấy cuốn đầu tiên trong bảng books.</summary>
-    public Task<Book?> GetMainBookAsync() =>
-        Books.AsNoTracking().OrderBy(b => b.BookId).FirstOrDefaultAsync();
 }

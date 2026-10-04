@@ -1,25 +1,18 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NhaGiaKim.Models.EF;
 using NhaGiaKim.Models.Entity;
 using NhaGiaKim.Models.ViewModels;
+using NhaGiaKim.Services.Interfaces;
 
 namespace NhaGiaKim.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly ApplicationDbContext _db;
-    private readonly IPasswordHasher<Account> _hasher;
+    private readonly IAccountService _accounts;
 
-    public AccountController(ApplicationDbContext db, IPasswordHasher<Account> hasher)
-    {
-        _db = db;
-        _hasher = hasher;
-    }
+    public AccountController(IAccountService accounts) => _accounts = accounts;
 
     // ---------- Đăng nhập ----------
     [HttpGet("dang-nhap")]
@@ -35,24 +28,18 @@ public class AccountController : Controller
         ViewData["ReturnUrl"] = returnUrl;
         if (!ModelState.IsValid) return View(vm);
 
-        var username = vm.Username.Trim();
-        var acc = await _db.Accounts.FirstOrDefaultAsync(a => a.Username == username);
+        var result = await _accounts.LoginAsync(vm.Username, vm.Password);
 
-        if (acc == null ||
-            _hasher.VerifyHashedPassword(acc, acc.Password, vm.Password) == PasswordVerificationResult.Failed)
+        if (!result.Succeeded)
         {
-            ModelState.AddModelError("", "Tên đăng nhập hoặc mật khẩu không đúng.");
+            ModelState.AddModelError("", result.Error == LoginError.Locked
+                ? "Tài khoản đã bị khóa. Vui lòng liên hệ cửa hàng."
+                : "Tên đăng nhập hoặc mật khẩu không đúng.");
             return View(vm);
         }
 
-        if (!acc.Status)
-        {
-            ModelState.AddModelError("", "Tài khoản đã bị khóa. Vui lòng liên hệ cửa hàng.");
-            return View(vm);
-        }
-
-        await SignInAccountAsync(acc, vm.RememberMe);
-        return RedirectAfterLogin(acc, returnUrl);
+        await SignInAccountAsync(result.Account!, vm.RememberMe);
+        return RedirectAfterLogin(result.Account!, returnUrl);
     }
 
     // ---------- Đăng ký (chỉ tạo tài khoản khách hàng) ----------
@@ -68,27 +55,14 @@ public class AccountController : Controller
     {
         ViewData["ReturnUrl"] = returnUrl;
 
-        var username = vm.Username.Trim();
-        var email = vm.Email.Trim().ToLower();
-
-        if (await _db.Accounts.AnyAsync(a => a.Username == username))
+        if (await _accounts.IsUsernameTakenAsync(vm.Username))
             ModelState.AddModelError(nameof(vm.Username), "Tên đăng nhập đã tồn tại");
-        if (await _db.Accounts.AnyAsync(a => a.Email != null && a.Email.ToLower() == email))
+        if (await _accounts.IsEmailTakenAsync(vm.Email))
             ModelState.AddModelError(nameof(vm.Email), "Email đã được sử dụng");
 
         if (!ModelState.IsValid) return View(vm);
 
-        var acc = new Account
-        {
-            Username = username,
-            FullName = vm.FullName.Trim(),
-            Email = email,
-            Role = AppRoles.Customer
-        };
-        acc.Password = _hasher.HashPassword(acc, vm.Password);
-
-        _db.Accounts.Add(acc);
-        await _db.SaveChangesAsync();
+        var acc = await _accounts.RegisterCustomerAsync(vm);
 
         await SignInAccountAsync(acc, false);
         return RedirectAfterLogin(acc, returnUrl);
@@ -105,7 +79,7 @@ public class AccountController : Controller
     [HttpGet("tu-choi-truy-cap")]
     public IActionResult AccessDenied() => View();
 
-    // ---------- Helpers ----------
+    // ---------- Helpers (việc thuộc về HTTP/cookie nên ở lại controller) ----------
     private async Task SignInAccountAsync(Account acc, bool remember)
     {
         var claims = new List<Claim>

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using NhaGiaKim.Models.EF;
 using NhaGiaKim.Models.Entity;
 using NhaGiaKim.Services;
+using NhaGiaKim.Services.Interfaces;
 
 // Các cột TIMESTAMP (không múi giờ) trong DB ↔ DateTime của .NET
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -16,6 +17,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<SiteSettingsService>();
+
+// Tầng nghiệp vụ: Controller -> Service -> ApplicationDbContext
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IAdminOrderService, AdminOrderService>();
+builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 builder.Services.AddSingleton<IPasswordHasher<Account>, PasswordHasher<Account>>();
 
 builder.Services

@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
-using NhaGiaKim.Models.EF;
+using NhaGiaKim.Services.Interfaces;
 
 namespace NhaGiaKim.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ApplicationDbContext _db;
+    private readonly IBookService _books;
 
-    public HomeController(ApplicationDbContext db) => _db = db;
+    public HomeController(IBookService books) => _books = books;
 
     [HttpGet("")]
     public Task<IActionResult> Index() => BookPage();
@@ -23,7 +23,7 @@ public class HomeController : Controller
 
     private async Task<IActionResult> BookPage()
     {
-        var book = await _db.GetMainBookAsync();
+        var book = await _books.GetMainBookAsync();
         if (book == null)
             return NotFound("Chưa có dữ liệu sách. Hãy chạy file Database/nhagiakim_update_seed.sql.");
         return View(book);
