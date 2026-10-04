@@ -62,40 +62,4 @@ public class AdminController : Controller
 
         return RedirectToAction(nameof(Orders), new { statusId });
     }
-
-    // ---------- Duyệt đánh giá ----------
-    [HttpGet("danh-gia")]
-    public async Task<IActionResult> Feedbacks(string? status)
-    {
-        var query = _db.Feedbacks.AsNoTracking().AsQueryable();
-        if (!string.IsNullOrEmpty(status))
-            query = query.Where(f => f.Status == status);
-
-        return View(new AdminFeedbacksViewModel
-        {
-            FilterStatus = status,
-            Items = await query.OrderByDescending(f => f.CreatedAt).ToListAsync()
-        });
-    }
-
-    [HttpPost("danh-gia/{id:long}"), ValidateAntiForgeryToken]
-    public async Task<IActionResult> ModerateFeedback(long id, string status, string? filter)
-    {
-        var allowed = new[] { FeedbackStatus.Pending, FeedbackStatus.Approved, FeedbackStatus.Rejected };
-        var fb = await _db.Feedbacks.FindAsync(id);
-
-        if (fb == null || !allowed.Contains(status))
-        {
-            TempData["Error"] = "Không tìm thấy đánh giá hoặc trạng thái không hợp lệ.";
-        }
-        else
-        {
-            fb.Status = status;
-            fb.UpdatedAt = DateTime.Now;
-            await _db.SaveChangesAsync();
-            TempData["Ok"] = "Đã cập nhật đánh giá.";
-        }
-
-        return RedirectToAction(nameof(Feedbacks), new { status = filter });
-    }
 }

@@ -44,6 +44,13 @@
                                 <div class="flex justify-between gap-4 md:col-span-2"><span class="text-[#666666] shrink-0">Ghi chú</span><span class="text-[#111111] text-right">@o.Note</span></div>
                             }
                         </div>
+
+                        @if (o.Status.StatusName is OrderStatusNames.Completed or OrderStatusNames.Cancelled)
+                        {
+                            <div class="mt-6 pt-5 border-t border-[#E5E5E5] flex justify-end">
+                                <a href="~/dat-sach?from=@o.OrderId" class="btn-primary text-sm h-[44px]">Mua lại</a>
+                            </div>
+                        }
                     </div>
                 }
             </div>

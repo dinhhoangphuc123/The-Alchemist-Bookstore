@@ -6,6 +6,8 @@
     var year = Model.PublishedAt?.Year.ToString() ?? "—";
     if (!string.IsNullOrWhiteSpace(Model.FileRemark)) { year += $" ({Model.FileRemark})"; }
 
+    var shipping = await Settings.GetAsync("shipping_info", "Toàn quốc trong 2-3 ngày");
+
     var rows = new List<(string Label, string Value)>
     {
         ("Tên sách", Model.Name),
@@ -26,18 +28,52 @@
             <h2 class="text-3xl md:text-4xl font-bold text-[#111111] tracking-tight">Thông tin sách</h2>
         </div>
 
-        <div class="max-w-3xl divide-y divide-[#E5E5E5] border-t border-b border-[#E5E5E5]">
-            @foreach (var r in rows)
-            {
-                <div class="py-4 flex flex-col sm:flex-row justify-between sm:items-center">
-                    <span class="text-sm font-medium text-[#666666]">@r.Label</span>
-                    <span class="text-sm font-semibold text-[#111111] mt-1 sm:mt-0">@r.Value</span>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+
+            @* ---- Bảng thông số (trái) ---- *@
+            <div class="lg:col-span-7 divide-y divide-[#E5E5E5] border-t border-b border-[#E5E5E5]">
+                @foreach (var r in rows)
+                {
+                    <div class="py-4 flex flex-col sm:flex-row justify-between sm:items-center gap-1 sm:gap-6">
+                        <span class="text-sm font-medium text-[#666666] shrink-0">@r.Label</span>
+                        <span class="text-sm font-semibold text-[#111111] sm:text-right">@r.Value</span>
+                    </div>
+                }
+                <div class="py-4 flex flex-col sm:flex-row justify-between sm:items-center gap-1 sm:gap-6">
+                    <span class="text-sm font-medium text-[#666666]">Giá bán niêm yết</span>
+                    <span class="text-base font-bold text-[#111111]">@Vnd.Format(Model.SalePrice)</span>
                 </div>
-            }
-            <div class="py-4 flex flex-col sm:flex-row justify-between sm:items-center">
-                <span class="text-sm font-medium text-[#666666]">Giá bán niêm yết</span>
-                <span class="text-base font-bold text-[#111111] mt-1 sm:mt-0">@Vnd.Format(Model.SalePrice)</span>
             </div>
+
+            @* ---- Thẻ sản phẩm (phải) ---- *@
+            <aside class="lg:col-span-5 lg:sticky lg:top-28">
+                <div class="p-6 md:p-8 rounded-xl border border-[#E5E5E5] bg-[#F5F5F5]">
+                    @if (!string.IsNullOrWhiteSpace(Model.Image))
+                    {
+                        <div class="aspect-[4/3] bg-white rounded-lg border border-[#E5E5E5] overflow-hidden flex items-center justify-center p-3 mb-3">
+                            <img src="@Model.Image" alt="Bìa sách @Model.Name" referrerpolicy="no-referrer" class="w-full h-full object-contain" />
+                        </div>
+                    }
+                    <p class="text-center text-[12px] uppercase tracking-widest text-[#666666] mb-6">Hardcover Collector's Edition</p>
+
+                    <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-6">
+                        <span class="text-3xl font-bold text-[#111111]">@Vnd.Format(Model.SalePrice)</span>
+                        @if (Model.DiscountPercent > 0)
+                        {
+                            <span class="text-base text-[#666666] line-through">@Vnd.Format(Model.Price)</span>
+                            <span class="inline-block bg-[#111111] text-white text-[12px] font-semibold px-2.5 py-1 rounded-[4px] tracking-wide">-@(Model.DiscountPercent)%</span>
+                        }
+                    </div>
+
+                    <div class="space-y-3 text-sm pb-6 mb-6 border-b border-[#E5E5E5]">
+                        <div class="flex justify-between gap-4"><span class="text-[#666666]">Giao hàng</span><span class="font-semibold text-[#111111] text-right">@shipping</span></div>
+                        <div class="flex justify-between gap-4"><span class="text-[#666666]">Phiên bản</span><span class="font-semibold text-[#111111] text-right">Bìa cứng đặc biệt</span></div>
+                        <div class="flex justify-between gap-4"><span class="text-[#666666]">Tình trạng</span><span class="font-semibold text-[#111111] text-right">Còn hàng trong kho</span></div>
+                    </div>
+
+                    <a href="~/dat-sach" class="btn-primary w-full text-center">Đặt sách ngay</a>
+                </div>
+            </aside>
         </div>
     </div>
 </section>

@@ -25,7 +25,6 @@ D:\LAP TRINH WEB\The Alchemist Bookstore\obj\Debug\net10.0\rjimswa.dswa.cache.js
 D:\LAP TRINH WEB\The Alchemist Bookstore\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
 D:\LAP TRINH WEB\The Alchemist Bookstore\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
 D:\LAP TRINH WEB\The Alchemist Bookstore\obj\Debug\net10.0\scopedcss\bundle\The Alchemist Bookstore.styles.css
-D:\LAP TRINH WEB\The Alchemist Bookstore\obj\Debug\net10.0\compressed\0v9ca0wmiz-{0}-myfscx45nm-myfscx45nm.gz
 D:\LAP TRINH WEB\The Alchemist Bookstore\obj\Debug\net10.0\compressed\vdjeji0xx6-{0}-61n19gt1b8-61n19gt1b8.gz
 D:\LAP TRINH WEB\The Alchemist Bookstore\obj\Debug\net10.0\compressed\ei2ekblqo5-{0}-mcf8qg6k0k-mcf8qg6k0k.gz
 D:\LAP TRINH WEB\The Alchemist Bookstore\obj\Debug\net10.0\compressed\mzjuk64lbv-{0}-bqjiyaj88i-bqjiyaj88i.gz
@@ -99,3 +98,5 @@ D:\LAP TRINH WEB\The Alchemist Bookstore\obj\Debug\net10.0\refint\The Alchemist 
 D:\LAP TRINH WEB\The Alchemist Bookstore\obj\Debug\net10.0\The Alchemist Bookstore.pdb
 D:\LAP TRINH WEB\The Alchemist Bookstore\obj\Debug\net10.0\The Alchemist Bookstore.genruntimeconfig.cache
 D:\LAP TRINH WEB\The Alchemist Bookstore\obj\Debug\net10.0\ref\The Alchemist Bookstore.dll
+D:\LAP TRINH WEB\The Alchemist Bookstore\obj\Debug\net10.0\The Alchemist Bookstore.sourcelink.json
+D:\LAP TRINH WEB\The Alchemist Bookstore\obj\Debug\net10.0\compressed\0v9ca0wmiz-{0}-ttiwduast4-ttiwduast4.gz

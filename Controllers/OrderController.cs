@@ -21,16 +21,36 @@ public class OrderController : Controller
 
     // ---------- Form đặt hàng ----------
     [HttpGet("dat-sach")]
-    public async Task<IActionResult> Create()
+    public async Task<IActionResult> Create(long? from)
     {
         var book = await _db.GetMainBookAsync();
         if (book == null) return NotFound();
 
-        return View(new OrderPageViewModel
+        var form = new OrderFormViewModel { CustomerName = User.FindFirst("FullName")?.Value ?? "" };
+
+        // "Mua lại": điền sẵn thông tin từ đơn cũ — chỉ lấy đơn thuộc về chính người đang đăng nhập
+        if (from.HasValue)
         {
-            Book = book,
-            Form = new OrderFormViewModel { CustomerName = User.FindFirst("FullName")?.Value ?? "" }
-        });
+            var accountId = CurrentAccountId;
+            var old = await _db.Orders.AsNoTracking()
+                .FirstOrDefaultAsync(o => o.OrderId == from.Value && o.AccountId == accountId);
+
+            if (old != null)
+            {
+                form = new OrderFormViewModel
+                {
+                    Quantity = old.Quantity,
+                    CustomerName = old.CustomerName,
+                    Phone = old.Phone,
+                    PaymentMethod = old.PaymentMethod,
+                    Address = old.Address,
+                    Note = old.Note
+                };
+                ViewData["ReorderCode"] = old.OrderCode;
+            }
+        }
+
+        return View(new OrderPageViewModel { Book = book, Form = form });
     }
 
     [HttpPost("dat-sach"), ValidateAntiForgeryToken]

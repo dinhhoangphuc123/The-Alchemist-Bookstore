@@ -9,9 +9,3 @@ public class AdminOrdersViewModel
     public Dictionary<long, int> Counts { get; set; } = new();
     public long? FilterStatusId { get; set; }
 }
-
-public class AdminFeedbacksViewModel
-{
-    public List<Feedback> Items { get; set; } = new();
-    public string? FilterStatus { get; set; }
-}

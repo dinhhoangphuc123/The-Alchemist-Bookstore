@@ -11,7 +11,7 @@
             <h1 class="text-2xl font-bold mb-2 tracking-tight">Đăng ký tài khoản</h1>
             <p class="text-sm text-[#666666] mb-8">Tạo tài khoản khách hàng để đặt sách và theo dõi đơn hàng.</p>
 
-            <form method="post" asp-action="Register" class="space-y-5">
+            <form method="post" asp-action="Register" class="space-y-5" data-loading="Đang tạo tài khoản...">
                 <input type="hidden" name="returnUrl" value="@returnUrl" />
                 <div asp-validation-summary="ModelOnly" class="text-sm text-red-600"></div>
 

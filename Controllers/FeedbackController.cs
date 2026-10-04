@@ -24,7 +24,7 @@ public class FeedbackController : Controller
         return View(await BuildPageAsync(book, form, showForm: false));
     }
 
-    // Chỉ khách hàng đã đăng nhập mới gửi được; đánh giá chờ admin duyệt
+    // Chỉ khách hàng đã đăng nhập mới gửi được; đánh giá hiển thị ngay, không qua duyệt
     [Authorize(Roles = AppRoles.Customer)]
     [HttpPost("danh-gia/gui"), ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind(Prefix = "Form")] FeedbackFormViewModel form)
@@ -45,30 +45,34 @@ public class FeedbackController : Controller
             CustomerName = form.CustomerName.Trim(),
             Rating = (short)form.Rating,
             Content = content,
-            Status = FeedbackStatus.Pending,
+            Status = FeedbackStatus.Approved,
             Badge = "Đánh giá mới từ bạn đọc"
         });
         await _db.SaveChangesAsync();
 
-        TempData["Notice"] = "Cảm ơn bạn đã chia sẻ đánh giá về tác phẩm Nhà Giả Kim! Đánh giá sẽ hiển thị sau khi được quản trị viên duyệt.";
+        TempData["Notice"] = "Cảm ơn bạn đã chia sẻ đánh giá về tác phẩm Nhà Giả Kim! Đánh giá của bạn đã được đăng bên dưới.";
         return RedirectToAction(nameof(Index));
     }
 
     private async Task<FeedbackPageViewModel> BuildPageAsync(Book book, FeedbackFormViewModel form, bool showForm)
     {
-        var approved = _db.Feedbacks.AsNoTracking()
-            .Where(f => f.BookId == book.BookId && f.Status == FeedbackStatus.Approved);
+        // Hiển thị toàn bộ đánh giá, không lọc theo trạng thái duyệt
+        var all = _db.Feedbacks.AsNoTracking().Where(f => f.BookId == book.BookId);
 
-        var count = await approved.CountAsync();
-        var average = count == 0 ? 0 : await approved.AverageAsync(f => (double)f.Rating);
-        var items = await approved
+        var count = await all.CountAsync();
+        var average = count == 0 ? 0 : await all.AverageAsync(f => (double)f.Rating);
+        var items = await all
             .OrderByDescending(f => f.CreatedAt).ThenBy(f => f.FeedbackId)
             .Take(50).ToListAsync();
 
         return new FeedbackPageViewModel
         {
-            Book = book, Items = items, Average = average, Count = count,
-            Form = form, ShowForm = showForm
+            Book = book,
+            Items = items,
+            Average = average,
+            Count = count,
+            Form = form,
+            ShowForm = showForm
         };
     }
 }

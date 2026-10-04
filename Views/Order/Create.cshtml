@@ -53,6 +53,14 @@
             <h3 class="text-2xl font-bold mb-2 tracking-tight">Thông tin nhận sách</h3>
             <p class="text-sm text-[#666666] mb-8">Vui lòng điền thông tin bên dưới để hoàn tất việc đăng ký sở hữu ấn bản.</p>
 
+            @if (ViewData["ReorderCode"] is string reorderCode)
+            {
+                <div class="mb-6 p-4 rounded-[8px] border border-[#111111] bg-[#F5F5F5] text-sm text-[#111111] leading-relaxed">
+                    Đã điền sẵn thông tin từ đơn <span class="font-semibold">#@reorderCode</span>.
+                    Giá được tính theo giá hiện tại. Vui lòng kiểm tra lại trước khi bấm ĐẶT SÁCH.
+                </div>
+            }
+
             <form method="post" asp-action="Create" class="space-y-5">
                 <div asp-validation-summary="ModelOnly" class="text-sm text-red-600"></div>
                 <input type="hidden" asp-for="Form.Quantity" data-qty-input />

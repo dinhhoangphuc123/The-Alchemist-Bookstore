@@ -27,13 +27,14 @@
 
     @* ================= HEADER ================= *@
     <header id="main-header" class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#E5E5E5] transition-all duration-300">
-        <div id="header-container" class="max-w-[1240px] mx-auto px-6 flex items-center justify-between transition-all duration-300 h-20">
-            <a href="~/" class="group flex flex-col tracking-tight">
+        @* Flex: logo (trái) | menu (chiếm phần giữa, canh giữa) | tài khoản (phải) — các phần không bao giờ đè nhau *@
+        <div id="header-container" class="max-w-[1240px] mx-auto px-6 flex items-center justify-between gap-6 transition-all duration-300 h-20">
+            <a href="~/" class="group flex flex-col tracking-tight shrink-0">
                 <span class="font-bold text-base text-[#111111] tracking-wider leading-none">NHÀ GIẢ KIM</span>
                 <span class="text-[11px] font-medium tracking-[0.25em] text-[#666666] mt-1 group-hover:text-black transition-colors">THE ALCHEMIST</span>
             </a>
 
-            <nav class="hidden lg:flex items-center space-x-10 text-[14px] font-medium text-[#666666]">
+            <nav class="hidden xl:flex flex-1 items-center justify-center gap-8 whitespace-nowrap text-[14px] font-medium text-[#666666]">
                 <a href="~/" class="@NavCss("gioi-thieu") transition-colors">Giới thiệu</a>
                 <a href="~/noi-dung" class="@NavCss("noi-dung") transition-colors">Nội dung</a>
                 <a href="~/tac-gia" class="@NavCss("tac-gia") transition-colors">Tác giả</a>
@@ -41,28 +42,24 @@
                 <a href="~/danh-gia" class="@NavCss("danh-gia") transition-colors">Đánh giá</a>
             </nav>
 
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center gap-5 shrink-0">
                 @if (isAuth)
                 {
-                    <div class="hidden lg:flex items-center space-x-5 text-[13px] font-medium text-[#666666]">
-                        @if (isAdmin)
+                    <div class="hidden xl:flex items-center gap-5 text-[13px] font-medium text-[#666666]">
+                        @if (!isAdmin)
                         {
-                            <a href="~/quan-tri/don-hang" class="hover:text-[#111111] transition-colors">Đơn hàng</a>
-                            <a href="~/quan-tri/danh-gia" class="hover:text-[#111111] transition-colors">Duyệt đánh giá</a>
+                            <a href="~/don-hang-cua-toi" class="hover:text-[#111111] transition-colors whitespace-nowrap">Đơn hàng của tôi</a>
+                            <span class="h-5 w-px bg-[#E5E5E5]"></span>
                         }
-                        else
-                        {
-                            <a href="~/don-hang-cua-toi" class="hover:text-[#111111] transition-colors">Đơn hàng của tôi</a>
-                        }
-                        <span class="text-[#111111] font-semibold max-w-[140px] truncate">@displayName</span>
-                        <form method="post" asp-controller="Account" asp-action="Logout">
-                            <button type="submit" class="hover:text-[#111111] transition-colors cursor-pointer">Đăng xuất</button>
+                        <span class="text-[#111111] font-semibold max-w-[110px] truncate">@displayName</span>
+                        <form method="post" asp-controller="Account" asp-action="Logout" data-loading="Đang đăng xuất...">
+                            <button type="submit" class="hover:text-[#111111] transition-colors cursor-pointer whitespace-nowrap">Đăng xuất</button>
                         </form>
                     </div>
                 }
                 else
                 {
-                    <a href="~/dang-nhap" class="hidden lg:inline text-[13px] font-medium text-[#666666] hover:text-[#111111] transition-colors">Đăng nhập</a>
+                    <a href="~/dang-nhap" class="hidden xl:inline text-[13px] font-medium text-[#666666] hover:text-[#111111] transition-colors">Đăng nhập</a>
                 }
 
                 @if (isAdmin)
@@ -74,7 +71,7 @@
                     <a href="~/dat-sach" class="hidden sm:inline-flex items-center justify-center bg-[#111111] text-white text-[13px] font-semibold tracking-wide uppercase px-6 h-[42px] rounded-[8px] hover:bg-[#2A2A2A] transition-all duration-200 whitespace-nowrap">Đặt sách</a>
                 }
 
-                <button id="mobile-toggle" aria-label="Toggle Menu" class="lg:hidden p-2 text-[#111111] focus:outline-none cursor-pointer">
+                <button id="mobile-toggle" aria-label="Toggle Menu" class="xl:hidden p-2 text-[#111111] focus:outline-none cursor-pointer">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
@@ -82,7 +79,7 @@
             </div>
         </div>
 
-        <div id="mobile-menu" class="hidden lg:hidden border-t border-[#E5E5E5] bg-white px-6 py-5 space-y-4">
+        <div id="mobile-menu" class="hidden xl:hidden border-t border-[#E5E5E5] bg-white px-6 py-5 space-y-4">
             <a href="~/" class="block text-sm font-medium text-[#666666] hover:text-[#111111]">Giới thiệu</a>
             <a href="~/noi-dung" class="block text-sm font-medium text-[#666666] hover:text-[#111111]">Nội dung</a>
             <a href="~/tac-gia" class="block text-sm font-medium text-[#666666] hover:text-[#111111]">Tác giả</a>
@@ -96,13 +93,12 @@
                     @if (isAdmin)
                     {
                         <a href="~/quan-tri/don-hang" class="block text-sm font-medium text-[#666666] hover:text-[#111111]">Quản lý đơn hàng</a>
-                        <a href="~/quan-tri/danh-gia" class="block text-sm font-medium text-[#666666] hover:text-[#111111]">Duyệt đánh giá</a>
                     }
                     else
                     {
                         <a href="~/don-hang-cua-toi" class="block text-sm font-medium text-[#666666] hover:text-[#111111]">Đơn hàng của tôi</a>
                     }
-                    <form method="post" asp-controller="Account" asp-action="Logout">
+                    <form method="post" asp-controller="Account" asp-action="Logout" data-loading="Đang đăng xuất...">
                         <button type="submit" class="text-sm font-medium text-[#666666] hover:text-[#111111] cursor-pointer">Đăng xuất</button>
                     </form>
                 }
@@ -172,6 +168,11 @@
             </div>
         </div>
     </footer>
+</div>
+
+<div id="loading-overlay" role="status" aria-live="polite" class="hidden fixed inset-0 z-[100] bg-white/80 backdrop-blur-sm flex-col items-center justify-center">
+    <div class="w-12 h-12 rounded-full border-4 border-[#E5E5E5] border-t-[#111111] animate-spin"></div>
+    <p id="loading-text" class="mt-5 text-sm font-medium text-[#111111] tracking-wide">Đang xử lý...</p>
 </div>
 
 <script src="~/js/site.js" asp-append-version="true"></script>
