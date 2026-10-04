@@ -13,4 +13,7 @@ public class AdminOrdersViewModel
     public int TotalQuantity { get; set; }
     public decimal TotalRevenue { get; set; }
     public int FeedbackCount { get; set; }
+
+    // Số cuốn còn trong kho (admin chỉnh trên trang này)
+    public int Stock { get; set; }
 }

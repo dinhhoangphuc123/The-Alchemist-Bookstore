@@ -20,6 +20,7 @@ builder.Services.AddScoped<SiteSettingsService>();
 
 // Tầng nghiệp vụ: Controller -> Service -> ApplicationDbContext
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IAdminOrderService, AdminOrderService>();

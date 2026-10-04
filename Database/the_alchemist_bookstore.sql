@@ -169,7 +169,21 @@ CROSS JOIN (VALUES
 WHERE NOT EXISTS (SELECT 1 FROM feedback);
 
 -- Tài khoản admin / khachhang được tạo tự động khi chạy web lần đầu (mật khẩu được băm bằng C#).
+-- Thêm cột tồn kho cho bảng books (PostgreSQL).
+-- Chạy file này trong pgAdmin (Query Tool) TRƯỚC khi chạy web, chỉ cần chạy 1 lần.
 
+ALTER TABLE books
+    ADD COLUMN IF NOT EXISTS stock INTEGER NOT NULL DEFAULT 0;
+
+-- Không cho tồn kho âm (an toàn thêm; code đã chặn bằng UPDATE ... WHERE stock >= qty)
+ALTER TABLE books DROP CONSTRAINT IF EXISTS chk_books_stock_non_negative;
+ALTER TABLE books ADD CONSTRAINT chk_books_stock_non_negative CHECK (stock >= 0);
+
+-- Đặt số lượng ban đầu cho cuốn sách (đổi 100 thành số bạn muốn, admin vẫn chỉnh lại được trên web)
+UPDATE books SET stock = 100 WHERE stock = 0;
+
+-- Kiểm tra
+SELECT book_id, name, stock FROM books ORDER BY book_id;
 
 
 

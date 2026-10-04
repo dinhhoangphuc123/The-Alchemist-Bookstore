@@ -68,10 +68,24 @@
                     <div class="space-y-3 text-sm pb-6 mb-6 border-b border-[#E5E5E5]">
                         <div class="flex justify-between gap-4"><span class="text-[#666666]">Giao hàng</span><span class="font-semibold text-[#111111] text-right">@shipping</span></div>
                         <div class="flex justify-between gap-4"><span class="text-[#666666]">Phiên bản</span><span class="font-semibold text-[#111111] text-right">Bìa cứng đặc biệt</span></div>
-                        <div class="flex justify-between gap-4"><span class="text-[#666666]">Tình trạng</span><span class="font-semibold text-[#111111] text-right">Còn hàng trong kho</span></div>
+                        <div class="flex justify-between gap-4"><span class="text-[#666666]">Tình trạng</span>@if (Model.InStock)
+                            {
+                                <span class="font-semibold text-[#111111] text-right">Còn hàng trong kho</span>
+                            }
+                            else
+                            {
+                                <span class="font-semibold text-red-600 text-right">Hết hàng</span>
+                            }</div>
                     </div>
 
-                    <a href="~/dat-sach" class="btn-primary w-full text-center">Đặt sách ngay</a>
+                    @if (Model.InStock)
+                    {
+                        <a href="~/dat-sach" class="btn-primary w-full text-center">Đặt sách ngay</a>
+                    }
+                    else
+                    {
+                        <span aria-disabled="true" class="btn-primary w-full text-center opacity-40 cursor-not-allowed pointer-events-none">Hết hàng</span>
+                    }
                 </div>
             </aside>
         </div>

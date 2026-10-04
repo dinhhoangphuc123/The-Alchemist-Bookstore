@@ -39,6 +39,9 @@ public static class OrderStatusNames
 
     public static bool CanMove(string from, string to) => NextOf(from).Contains(to);
 
+    /// <summary>Chuyển sang trạng thái này thì số cuốn của đơn được trả lại kho.</summary>
+    public static bool RestoresStock(string target) => target == Cancelled;
+
     public static string ActionLabel(string target) => target switch
     {
         Confirmed => "Xác nhận đơn",

@@ -1,9 +1,13 @@
+@inject IInventoryService Inventory
 @{
     var nav = ViewData["Nav"] as string ?? "";
     var isAuth = User.Identity?.IsAuthenticated == true;
     var isAdmin = User.IsInRole(AppRoles.Admin);
     var displayName = User.FindFirst("FullName")?.Value ?? User.Identity?.Name ?? "";
     string NavCss(string key) => nav == key ? "text-[#111111]" : "hover:text-[#111111]";
+
+    // Hết hàng thì khóa các nút "Đặt sách" (admin không thấy nút này nên khỏi truy vấn)
+    var inStock = isAdmin || await Inventory.IsInStockAsync();
 
     var siteEmail = await Settings.GetAsync("site_email", "contact@nhagiakim.vn");
     var siteHotline = await Settings.GetAsync("site_hotline", "1900 6868 (8:00 - 20:00)");
@@ -68,7 +72,14 @@
                 }
                 else
                 {
-                    <a href="~/dat-sach" class="hidden sm:inline-flex items-center justify-center bg-[#111111] text-white text-[13px] font-semibold tracking-wide uppercase px-6 h-[42px] rounded-[8px] hover:bg-[#2A2A2A] transition-all duration-200 whitespace-nowrap">Đặt sách</a>
+                    if (inStock)
+                    {
+                        <a href="~/dat-sach" class="hidden sm:inline-flex items-center justify-center bg-[#111111] text-white text-[13px] font-semibold tracking-wide uppercase px-6 h-[42px] rounded-[8px] hover:bg-[#2A2A2A] transition-all duration-200 whitespace-nowrap">Đặt sách</a>
+                    }
+                    else
+                    {
+                        <span aria-disabled="true" class="hidden sm:inline-flex items-center justify-center bg-[#E5E5E5] text-[#999999] text-[13px] font-semibold tracking-wide uppercase px-6 h-[42px] rounded-[8px] cursor-not-allowed whitespace-nowrap">Hết hàng</span>
+                    }
                 }
 
                 <button id="mobile-toggle" aria-label="Toggle Menu" class="xl:hidden p-2 text-[#111111] focus:outline-none cursor-pointer">
@@ -111,7 +122,14 @@
 
             @if (!isAdmin)
             {
-                <a href="~/dat-sach" class="block w-full text-center bg-[#111111] text-white py-3 rounded-[8px] text-sm font-semibold tracking-wide">ĐẶT SÁCH NGAY</a>
+                if (inStock)
+                {
+                    <a href="~/dat-sach" class="block w-full text-center bg-[#111111] text-white py-3 rounded-[8px] text-sm font-semibold tracking-wide">ĐẶT SÁCH NGAY</a>
+                }
+                else
+                {
+                    <span aria-disabled="true" class="block w-full text-center bg-[#E5E5E5] text-[#999999] py-3 rounded-[8px] text-sm font-semibold tracking-wide cursor-not-allowed">HẾT HÀNG</span>
+                }
             }
         </div>
     </header>

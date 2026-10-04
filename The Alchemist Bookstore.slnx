@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="The Alchemist Bookstore.csproj" />
+  <Project Path="Tests/NhaGiaKim.Tests/NhaGiaKim.Tests.csproj" />
 </Solution>

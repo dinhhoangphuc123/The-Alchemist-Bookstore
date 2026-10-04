@@ -13,7 +13,7 @@
 <section class="py-16 md:py-20 bg-[#F5F5F5] border-b border-[#E5E5E5]">
     <div class="max-w-[1240px] mx-auto px-6">
         @* ================= THỐNG KÊ ================= *@
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
             <div class="bg-white border border-[#E5E5E5] rounded-[8px] p-6">
                 <div class="text-xs font-semibold uppercase tracking-wider text-[#666666]">Số cuốn đã đặt</div>
                 <div class="mt-3 text-3xl font-bold text-[#111111] tracking-tight">@Model.TotalQuantity.ToString("N0", new CultureInfo("vi-VN"))</div>
@@ -23,6 +23,17 @@
                 <div class="text-xs font-semibold uppercase tracking-wider text-[#666666]">Số đánh giá</div>
                 <div class="mt-3 text-3xl font-bold text-[#111111] tracking-tight">@Model.FeedbackCount.ToString("N0", new CultureInfo("vi-VN"))</div>
                 <div class="mt-1 text-xs text-[#999999]">Tất cả đánh giá của bạn đọc</div>
+            </div>
+            <div class="bg-white border border-[#E5E5E5] rounded-[8px] p-6">
+                <div class="text-xs font-semibold uppercase tracking-wider text-[#666666]">Số lượng trong kho</div>
+                <div class="mt-3 text-3xl font-bold tracking-tight @(Model.Stock > 0 ? "text-[#111111]" : "text-red-600")">@Model.Stock.ToString("N0", new CultureInfo("vi-VN"))</div>
+                <div class="mt-1 text-xs text-[#999999]">Tình trạng: @(Model.Stock > 0 ? "Còn hàng" : "Hết hàng")</div>
+                <form method="post" asp-action="UpdateStock" class="mt-4 flex gap-2">
+                    <input type="hidden" name="statusId" value="@Model.FilterStatusId" />
+                    <input type="number" name="stock" min="0" max="100000" step="1" value="@Model.Stock" required
+                           aria-label="Số lượng trong kho" class="custom-input w-full" />
+                    <button type="submit" class="bg-[#111111] text-white px-4 rounded-[8px] text-xs font-semibold uppercase tracking-wider hover:bg-[#2A2A2A] cursor-pointer whitespace-nowrap">Lưu</button>
+                </form>
             </div>
             <div class="bg-white border border-[#E5E5E5] rounded-[8px] p-6">
                 <div class="text-xs font-semibold uppercase tracking-wider text-[#666666]">Doanh thu</div>

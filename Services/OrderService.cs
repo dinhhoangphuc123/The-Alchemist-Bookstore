@@ -9,8 +9,13 @@ namespace NhaGiaKim.Services;
 public class OrderService : IOrderService
 {
     private readonly ApplicationDbContext _db;
+    private readonly IInventoryService _inventory;
 
-    public OrderService(ApplicationDbContext db) => _db = db;
+    public OrderService(ApplicationDbContext db, IInventoryService inventory)
+    {
+        _db = db;
+        _inventory = inventory;
+    }
 
     public async Task<ReorderData?> GetReorderDataAsync(long accountId, long orderId)
     {
@@ -56,8 +61,19 @@ public class OrderService : IOrderService
             OrderTime = DateTime.Now
         };
 
-        // Mã đơn dạng ALG20260001 được sinh từ order_id nên cần lưu 2 bước trong 1 transaction
+        // Trừ kho + lưu đơn + sinh mã đơn nằm chung 1 transaction:
+        // nếu không đủ hàng thì thoát ra, transaction tự rollback, không có đơn nào được tạo.
         await using var tx = await _db.Database.BeginTransactionAsync();
+
+        if (!await _inventory.TryReserveAsync(book.BookId, form.Quantity))
+        {
+            var left = await _inventory.GetStockAsync();
+            return new CreateOrderResult(null, left <= 0
+                ? "Rất tiếc, sách đã hết hàng."
+                : $"Trong kho chỉ còn {left} cuốn. Vui lòng giảm số lượng đặt.");
+        }
+
+        // Mã đơn dạng ALG20260001 được sinh từ order_id nên cần lưu 2 bước
         _db.Orders.Add(order);
         await _db.SaveChangesAsync();
 

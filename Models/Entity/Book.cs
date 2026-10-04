@@ -18,6 +18,9 @@ public class Book
     [Column("price")] public decimal Price { get; set; }
     [Column("promotion")] public decimal? Promotion { get; set; }
 
+    /// <summary>Số cuốn còn trong kho (admin điều chỉnh, giảm khi có đơn mới).</summary>
+    [Column("stock")] public int Stock { get; set; }
+
     [Column("image")] public string? Image { get; set; }
     [Column("description")] public string? Description { get; set; }
 
@@ -41,6 +44,13 @@ public class Book
             return Math.Round(Price * (1 - promo / 100m) / 1000m, 0, MidpointRounding.AwayFromZero) * 1000m;
         }
     }
+
+    /// <summary>Còn ít nhất 1 cuốn thì còn hàng.</summary>
+    [NotMapped]
+    public bool InStock => Stock > 0;
+
+    /// <summary>Đủ hàng để bán <paramref name="quantity"/> cuốn không?</summary>
+    public bool CanFulfill(int quantity) => quantity > 0 && quantity <= Stock;
 
     [NotMapped]
     public int DiscountPercent => (int)Math.Round(Promotion ?? 0m, MidpointRounding.AwayFromZero);

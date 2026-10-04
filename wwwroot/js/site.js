@@ -118,7 +118,8 @@
     var input = document.querySelector('[data-qty-input]');
     var display = document.getElementById('qty-display');
     var total = document.getElementById('total-price');
-    var qty = Number(input.value) || 1;
+    var maxQty = Number(summary.getAttribute('data-max-qty')) || 50;
+    var qty = Math.min(maxQty, Number(input.value) || 1);
 
     function render() {
       input.value = qty;
@@ -128,7 +129,7 @@
 
     summary.querySelectorAll('[data-qty]').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        qty = Math.min(50, Math.max(1, qty + Number(btn.getAttribute('data-qty'))));
+        qty = Math.min(maxQty, Math.max(1, qty + Number(btn.getAttribute('data-qty'))));
         render();
       });
     });

@@ -39,6 +39,8 @@ public class OrderController : Controller
             if (reorder != null)
             {
                 form = reorder.Form;
+                // Không điền sẵn số lượng vượt quá số cuốn còn trong kho
+                if (book.InStock && form.Quantity > book.Stock) form.Quantity = book.Stock;
                 ViewData["ReorderCode"] = reorder.OrderCode;
             }
         }
@@ -53,6 +55,8 @@ public class OrderController : Controller
         if (book == null) return NotFound();
 
         var page = new OrderPageViewModel { Book = book, Form = form };
+        if (!book.InStock)
+            ModelState.AddModelError("", "Rất tiếc, sách đã hết hàng. Vui lòng quay lại sau.");
         if (!ModelState.IsValid) return View(page);
 
         var result = await _orders.CreateOrderAsync(CurrentAccountId, book, form);

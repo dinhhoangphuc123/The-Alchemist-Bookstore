@@ -9,8 +9,13 @@ namespace NhaGiaKim.Services;
 public class AdminOrderService : IAdminOrderService
 {
     private readonly ApplicationDbContext _db;
+    private readonly IInventoryService _inventory;
 
-    public AdminOrderService(ApplicationDbContext db) => _db = db;
+    public AdminOrderService(ApplicationDbContext db, IInventoryService inventory)
+    {
+        _db = db;
+        _inventory = inventory;
+    }
 
     public async Task<AdminOrdersViewModel> GetOrdersDashboardAsync(long? statusId)
     {
@@ -29,6 +34,7 @@ public class AdminOrderService : IAdminOrderService
             TotalQuantity = await valid.SumAsync(o => o.Quantity),
             TotalRevenue = await valid.SumAsync(o => o.TotalAmount),
             FeedbackCount = await _db.Feedbacks.CountAsync(),
+            Stock = await _inventory.GetStockAsync(),
             FilterStatusId = statusId,
             Statuses = await _db.OrderStatuses.AsNoTracking().OrderBy(s => s.StatusId).ToListAsync(),
             Orders = await query.OrderByDescending(o => o.OrderTime).ToListAsync(),
@@ -50,8 +56,20 @@ public class AdminOrderService : IAdminOrderService
             return new StatusUpdateResult(false,
                 $"Không thể chuyển đơn {order.OrderCode} từ “{order.Status.StatusName}” sang “{target.StatusName}”.");
 
+        // Hủy đơn thì trả số cuốn về kho; đổi trạng thái + hoàn kho làm chung 1 transaction
+        await using var tx = await _db.Database.BeginTransactionAsync();
+
         order.Status = target;
         await _db.SaveChangesAsync();
-        return new StatusUpdateResult(true, $"Đơn {order.OrderCode} đã chuyển sang “{target.StatusName}”.");
+
+        var restored = OrderStatusNames.RestoresStock(target.StatusName);
+        if (restored)
+            await _inventory.ReleaseAsync(order.BookId, order.Quantity);
+
+        await tx.CommitAsync();
+
+        var message = $"Đơn {order.OrderCode} đã chuyển sang “{target.StatusName}”.";
+        if (restored) message += $" Đã hoàn {order.Quantity} cuốn vào kho.";
+        return new StatusUpdateResult(true, message);
     }
 }
