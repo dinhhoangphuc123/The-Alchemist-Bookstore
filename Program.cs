@@ -44,8 +44,8 @@ using (var scope = app.Services.CreateScope())
 {
     await DbSeeder.SeedAccountsAsync(scope.ServiceProvider);
 }
-
-app.UseHttpsRedirection();
+if (!app.Environment.IsProduction())
+    app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
